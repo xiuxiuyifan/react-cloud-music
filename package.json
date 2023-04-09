@@ -9,12 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@better-scroll/core": "^2.5.1",
+    "@better-scroll/pull-down": "^2.5.1",
+    "@better-scroll/pull-up": "^2.5.1",
+    "add": "^2.0.6",
     "immutable": "^4.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "styled-components": "^5.3.9",
     "swiper": "^9.2.0",
+    "yarn": "^1.22.19",
     "zustand": "^4.3.7"
   },
   "devDependencies": {

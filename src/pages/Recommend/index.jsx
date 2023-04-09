@@ -1,6 +1,8 @@
 import { memo } from "react";
 import Slider from "../../components/slider";
 import RecommendList from "../../components/recommend-list";
+import { Content } from "./style";
+import Scroll from "../../baseUI/scroll";
 
 function Recommend() {
   const bannerList = [1, 2, 3, 4].map((item) => {
@@ -19,10 +21,14 @@ function Recommend() {
     };
   });
   return (
-    <div>
-      <Slider bannerList={bannerList}></Slider>
-      <RecommendList recommendList={recommendList}></RecommendList>
-    </div>
+    <Content className="list">
+      <Scroll>
+        <div>
+          <Slider bannerList={bannerList}></Slider>
+          <RecommendList recommendList={recommendList}></RecommendList>
+        </div>
+      </Scroll>
+    </Content>
   );
 }
 

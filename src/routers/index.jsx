@@ -1,4 +1,3 @@
-import { Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Rank from "../pages/Rank";
 import Recommend from "../pages/Recommend";

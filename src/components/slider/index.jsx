@@ -14,7 +14,7 @@ const Slider = (props) => {
           {bannerList.map((slider, index) => (
             <SwiperSlide key={index} className="swiper-slide">
               <div className="slider-nav">
-                <img src={slider.imgUrl} width="100%" height="100%" />
+                <img src={slider.imageUrl} width="100%" height="100%" />
               </div>
             </SwiperSlide>
           ))}

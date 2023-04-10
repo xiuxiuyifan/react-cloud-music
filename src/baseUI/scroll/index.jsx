@@ -137,7 +137,7 @@ Scroll.propTypes = {
   direction: PropTypes.oneOf(["vertical", "horizontal"]), // 滚动的方向
   click: PropTypes.bool, // 是否支持点击,
   refresh: PropTypes.bool, // 是否刷新
-  onScroll: PropTypes.bool, // 滑动触发的回调函数
+  onScroll: PropTypes.func, // 滑动触发的回调函数
   pullUp: PropTypes.func, // 上拉加载逻辑
   pullDown: PropTypes.func, // 下拉加载逻辑
   pullUpLoading: PropTypes.bool, // 是否显示上拉加载的 loading

@@ -3,26 +3,33 @@ import Slider from "../../components/slider";
 import RecommendList from "../../components/recommend-list";
 import { Content } from "./style";
 import Scroll from "../../baseUI/scroll";
-import useRecommendStore from "./store";
+import useStore from "../../store";
+import { forceCheck } from "react-lazyload";
+import Loading from "../../baseUI/loading";
 
 function Recommend() {
-  const bannerList = useRecommendStore((store) => store.bannerList);
-  const initBannerList = useRecommendStore((store) => store.initBannerList);
-
-  const recommendList = useRecommendStore((store) => store.recommendList);
-  const initRecommendList = useRecommendStore(
-    (store) => store.initRecommendList
-  );
+  const {
+    bannerList,
+    initBannerList,
+    recommendList,
+    initRecommendList,
+    recommendLoading,
+  } = useStore();
 
   // 页面初始化
   useEffect(() => {
-    initBannerList();
-    initRecommendList();
+    if (!bannerList.length) {
+      initBannerList();
+    }
+    if (!recommendList.length) {
+      initRecommendList();
+    }
   }, []);
 
   return (
     <Content className="list">
-      <Scroll>
+      {recommendLoading ? <Loading></Loading> : null}
+      <Scroll onScroll={forceCheck}>
         <div>
           <Slider bannerList={bannerList}></Slider>
           <RecommendList recommendList={recommendList}></RecommendList>

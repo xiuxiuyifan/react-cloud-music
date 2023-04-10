@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Rank from "../pages/Rank";
 import Recommend from "../pages/Recommend";
@@ -11,7 +12,6 @@ const routers = [
       {
         path: "recommend",
         element: <Recommend />,
-        index: true,
       },
       {
         path: "singers",
@@ -20,6 +20,10 @@ const routers = [
       {
         path: "rank",
         element: <Rank />,
+      },
+      {
+        path: "",
+        element: <Navigate to="recommend" replace></Navigate>,
       },
     ],
   },

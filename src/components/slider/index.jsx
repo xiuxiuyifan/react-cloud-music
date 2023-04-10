@@ -10,7 +10,12 @@ const Slider = (props) => {
     <SliderContainer>
       <div className="before"></div>
       <div className="slider-container">
-        <Swiper pagination={true} modules={[Pagination]} loop={true}>
+        <Swiper
+          pagination={true}
+          modules={[Pagination]}
+          loop={true}
+          autoplay={true}
+        >
           {bannerList.map((slider, index) => (
             <SwiperSlide key={index} className="swiper-slide">
               <div className="slider-nav">

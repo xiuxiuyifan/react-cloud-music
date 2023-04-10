@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { getBannerList, getRecommendList } from "../../api/request";
+import { getBannerList, getRecommendList } from "../api/request";
 
 
-const useRecommendStore = create((set) => ({
+const useStore = create((set) => ({
   // 定义 banner 数据
   bannerList: [],
   initBannerList: async () => {
@@ -12,9 +12,16 @@ const useRecommendStore = create((set) => ({
   // 定义 recommend 数据
   recommendList: [],
   initRecommendList: async () => {
+    set({
+      recommendLoading: true
+    })
     const data = await getRecommendList()
-    set({ recommendList: data.result })
-  }
+    set({
+      recommendList: data.result,
+      recommendLoading: false
+    })
+  },
+  recommendLoading: false,
 }))
 
-export default useRecommendStore
+export default useStore

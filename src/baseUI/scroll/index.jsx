@@ -55,6 +55,7 @@ const Scroll = forwardRef((props, ref) => {
         top: bounceTop,
         bottom: bounceBottom,
       },
+      click,
     });
     // 保存当前滚动实例
     setBScroll(scroll);

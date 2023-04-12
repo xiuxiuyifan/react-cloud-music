@@ -1,7 +1,9 @@
 import axios from "axios";
 
 
-export const baseUrl = 'http://127.0.0.1:3000'
+export const baseUrl = `${location.protocol}//${location.hostname}:3000`
+
+console.log(baseUrl)
 
 // 创建 axios 实例
 

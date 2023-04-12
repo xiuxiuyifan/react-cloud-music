@@ -10,6 +10,8 @@ import {
 } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import LoadingV2 from "../loading-v2";
+import Loading from "../loading";
 
 // 安装下拉刷新和上拉加载的插件
 BScroll.use(PullDown);
@@ -20,6 +22,26 @@ const ScrollContainer = styled.div`
   height: 100%;
   overflow: hidden;
   position: relative;
+`;
+
+const PullUpLoading = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 34px;
+  width: 120px;
+  margin: auto;
+  z-index: 100;
+`;
+
+const PullDownLoading = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0px;
+  height: 30px;
+  margin: auto;
+  z-index: 100;
 `;
 
 // 不能再函数组件上直接使用 ref 因为函数组件是没有实例的
@@ -87,28 +109,25 @@ const Scroll = forwardRef((props, ref) => {
   // 上拉到底的判断，和调用用户传进来的刷新的函数
   useEffect(() => {
     if (!bScroll || !pullUp) return;
-    bScroll.on("scrollEnd", () => {
-      // 判断是否到了底部
-      if (bScroll.y <= bScroll.maxScrollY + 100) {
-        pullUp();
-      }
+    bScroll.on("pullingUp", () => {
+      pullUp();
+      bScroll.finishPullUp();
     });
     return () => {
-      bScroll.off("scrollEnd");
+      bScroll.off("pullingUp");
     };
   }, [pullUp, bScroll]);
 
-  // 进行下拉的判断，调用下拉刷线的函数
+  // 进行下拉的判断，调用下拉刷新的函数
   useEffect(() => {
     if (!bScroll || !pullDown) return;
-    bScroll.on("touchEnd", (pos) => {
+    bScroll.on("pullingDown", (pos) => {
       // 判断用户的下拉
-      if (pos.y > 50) {
-        pullDown();
-      }
+      pullDown();
+      bScroll.finishPullDown();
     });
     return () => {
-      bScroll.off("touchEnd");
+      bScroll.off("pullingDown");
     };
   }, [pullDown, bScroll]);
 
@@ -128,7 +147,19 @@ const Scroll = forwardRef((props, ref) => {
   }));
 
   return (
-    <ScrollContainer ref={scrollContainerRef}>{props.children}</ScrollContainer>
+    <ScrollContainer ref={scrollContainerRef}>
+      {props.children}
+      {pullUpLoading ? (
+        <PullUpLoading>
+          <LoadingV2></LoadingV2>
+        </PullUpLoading>
+      ) : null}
+      {pullDownLoading ? (
+        <PullDownLoading>
+          <Loading></Loading>
+        </PullDownLoading>
+      ) : null}
+    </ScrollContainer>
   );
 });
 
@@ -154,8 +185,8 @@ Scroll.defaultProps = {
   onScroll: null,
   pullUpLoading: false,
   pullDownLoading: false,
-  pullUp: null,
-  pullDown: null,
+  pullUp: () => {},
+  pullDown: () => {},
   bounceTop: true,
   bounceBottom: true,
 };

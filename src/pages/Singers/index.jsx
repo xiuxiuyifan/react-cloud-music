@@ -4,6 +4,9 @@ import { List, ListContainer, ListItem, NavContainer } from "./style";
 import { alphaTypes, categoryTypes } from "../../api/static";
 import Scroll from "../../baseUI/scroll";
 import useStore from "../../store";
+import LazyLoad, { forceCheck } from "react-lazyload";
+import singerPng from "./singer.png";
+import { debounce } from "../../utils";
 
 // 渲染函数，返回歌手列表组件
 
@@ -28,12 +31,23 @@ const renderSingerList = () => {
         return (
           <ListItem key={item.accountId + "" + index}>
             <div className="img_wrapper">
-              <img
-                src={`${item.picUrl}?param=300*300`}
-                width="100%"
-                height="100%"
-                alt="music"
-              />
+              <LazyLoad
+                placeholder={
+                  <img
+                    width="100%"
+                    height="100%"
+                    src={singerPng}
+                    alt="singer"
+                  />
+                }
+              >
+                <img
+                  src={`${item.picUrl}?param=300*300`}
+                  width="100%"
+                  height="100%"
+                  alt="singer"
+                />
+              </LazyLoad>
             </div>
             <span className="name">{item.name}</span>
           </ListItem>
@@ -57,6 +71,7 @@ function Singers() {
     singerPageCount,
     singerSetPageCount,
     singerSetSingerHotListPullUp,
+    singerSetCategoryOrAlphaSingerListPullUp,
   } = useStore();
   const singerListRef = useRef(null);
 
@@ -64,31 +79,35 @@ function Singers() {
   const [category, setCategory] = useState("");
   const handleUpdateCategory = (val) => {
     setCategory(val);
+    singerSetCategoryOrAlphaSingerList(category, alpha);
   };
 
   const [alpha, setAlpha] = useState("");
   const handleUpdateAlpha = (val) => {
     setAlpha(val);
+    singerSetCategoryOrAlphaSingerList(category, alpha);
   };
 
   // 上拉加载
-  const handlePullUp = () => {
+  const handlePullUp = debounce(() => {
+    singerSetPageCount(singerPageCount + 1);
     if (category === "" && alpha === "") {
-      singerSetPageCount(singerPageCount + 1);
-      singerSetSingerHotListPullUp(singerPageCount);
+      singerSetSingerHotListPullUp();
+    } else {
+      singerSetCategoryOrAlphaSingerListPullUp(category, alpha);
     }
-  };
+  }, 300);
 
   // 下拉刷新
-  const handlePullDown = async () => {
+  const handlePullDown = debounce(() => {
     // 下拉刷新的时候如果   分类和 alpha 都是空的话就获取 热门歌手
     // 否则获取歌手和 alpha
     if (category === "" && alpha === "") {
       singerSetSingerHotList(0);
     } else {
-      singerSetCategoryOrAlphaSingerList(category, alpha, singerPageCount);
+      singerSetCategoryOrAlphaSingerList(category, alpha);
     }
-  };
+  }, 300);
 
   useEffect(() => {}, []);
 
@@ -115,6 +134,7 @@ function Singers() {
           pullDown={handlePullDown}
           pullUpLoading={singerPullUpLoading}
           pullDownLoading={singerPullDownLoading}
+          onScroll={forceCheck}
         >
           {renderSingerList()}
         </Scroll>

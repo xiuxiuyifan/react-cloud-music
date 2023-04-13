@@ -79,6 +79,17 @@ const useStore = create((set, get) => ({
     }))
   },
   // 上拉加载 分类歌手和字母歌手
+  singerSetCategoryOrAlphaSingerListPullUp: async (category, alpha) => {
+    set((state) => ({
+      singerPullUpLoading: true
+    }))
+    const count = get().singerPageCount
+    const data = await getSingerList(category, alpha, count)
+    set((state) => ({
+      singerList: [...state.singerList, ...data.artists],
+      singerPullUpLoading: false
+    }))
+  }
 }))
 
 export default useStore

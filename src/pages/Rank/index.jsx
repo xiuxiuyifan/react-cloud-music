@@ -3,11 +3,16 @@ import Scroll from "../../baseUI/scroll";
 import useStore from "../../store";
 import { filterIndex } from "../../utils";
 import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
 function Rank() {
   const { rankLoading, rankList, rankSetRankList } = useStore();
 
-  const enterDetail = (detail) => {};
+  const navigate = useNavigate();
+
+  const enterDetail = (id) => {
+    navigate(`/rank/${id}`);
+  };
 
   const renderSongList = (list) => {
     return list.length ? (
@@ -28,9 +33,9 @@ function Rank() {
         {list.map((item, index) => {
           return (
             <ListItem
-              key={item.coverImagId}
+              key={`${item.coverImagId}${index}`}
               tracks={item.tracks}
-              onClick={() => enterDetail(item)}
+              onClick={() => enterDetail(item.id)}
             >
               <div className="img_wrapper">
                 <img src={item.coverImgUrl} alt="" />
@@ -69,6 +74,8 @@ function Rank() {
           {renderRankList(globalList, true)}
         </div>
       </Scroll>
+      {/* 子路由进入详情 */}
+      <Outlet></Outlet>
     </Container>
   );
 }

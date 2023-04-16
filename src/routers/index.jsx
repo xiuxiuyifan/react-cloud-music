@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Rank from "../pages/Rank";
 import Recommend from "../pages/Recommend";
 import Singers from "../pages/Singers";
+import Album from "../pages/Album";
 
 const routers = [
   {
@@ -20,6 +21,12 @@ const routers = [
       {
         path: "rank",
         element: <Rank />,
+        children: [
+          {
+            path: ":id",
+            element: <Album />,
+          },
+        ],
       },
       {
         path: "",

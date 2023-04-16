@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getBannerList, getHotSingerList, getRecommendList, getSingerList } from "../api/request";
+import { getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerList } from "../api/request";
 
 
 const useStore = create((set, get) => ({
@@ -89,6 +89,16 @@ const useStore = create((set, get) => ({
       singerList: [...state.singerList, ...data.artists],
       singerPullUpLoading: false
     }))
+  },
+
+  // rankList 页面数据
+  rankList: [],
+  rankLoading: false,
+  rankSetRankList: async () => {
+    let data = await getRankList()
+    set({
+      rankList: data.list
+    })
   }
 }))
 

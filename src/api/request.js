@@ -26,3 +26,7 @@ export const getSingerList = (category, alpha, count) => {
     }
   })
 }
+
+export const getRankList = () => {
+  return request.get(`/toplist/detail`)
+}

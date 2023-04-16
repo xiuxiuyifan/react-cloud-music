@@ -23,7 +23,9 @@ const renderSingerList = () => {
 
   // 初始化数据
   useEffect(() => {
-    singerSetSingerHotList(0);
+    if (!singerList.length) {
+      singerSetSingerHotList(0);
+    }
   }, []);
   return (
     <List>

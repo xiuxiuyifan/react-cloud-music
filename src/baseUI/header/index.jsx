@@ -26,14 +26,20 @@ const HeaderContainer = styled.div`
 `;
 
 const Header = forwardRef((props, ref) => {
-  const { handleClick, title } = props;
+  const { handleClick, title, isMarquee } = props;
 
   return (
     <HeaderContainer ref={ref}>
       <i className="iconfont back" onClick={handleClick}>
         &#xe655;
       </i>
-      <h1>{title}</h1>
+      {isMarquee ? (
+        <marquee>
+          <h1>{title}</h1>
+        </marquee>
+      ) : (
+        <h1>{title}</h1>
+      )}
     </HeaderContainer>
   );
 });
@@ -41,10 +47,12 @@ const Header = forwardRef((props, ref) => {
 Header.defaultProps = {
   handleClick: () => {},
   title: "标题",
+  isMarquee: false,
 };
 Header.propTypes = {
   handleClick: PropTypes.func,
   title: PropTypes.string,
+  isMarquee: PropTypes.bool,
 };
 
 export default memo(Header);

@@ -4,6 +4,7 @@ import useStore from "../../store";
 import { filterIndex } from "../../utils";
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import Loading from "../../baseUI/loading";
 
 function Rank() {
   const { rankLoading, rankList, rankSetRankList } = useStore();
@@ -74,6 +75,7 @@ function Rank() {
           {renderRankList(globalList, true)}
         </div>
       </Scroll>
+      {rankLoading ? <Loading></Loading> : null}
       {/* 子路由进入详情 */}
       <Outlet></Outlet>
     </Container>

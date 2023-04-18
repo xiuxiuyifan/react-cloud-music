@@ -59,7 +59,6 @@ const Scroll = forwardRef((props, ref) => {
     bounceBottom,
   } = props;
   const { pullUp, pullDown, onScroll } = props;
-
   // 用来保存当前滚动实例
   const [bScroll, setBScroll] = useState();
 

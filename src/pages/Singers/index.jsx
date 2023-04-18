@@ -81,13 +81,13 @@ function Singers() {
   const [category, setCategory] = useState("");
   const handleUpdateCategory = (val) => {
     setCategory(val);
-    singerSetCategoryOrAlphaSingerList(category, alpha);
+    singerSetCategoryOrAlphaSingerList(val, alpha);
   };
 
   const [alpha, setAlpha] = useState("");
   const handleUpdateAlpha = (val) => {
     setAlpha(val);
-    singerSetCategoryOrAlphaSingerList(category, alpha);
+    singerSetCategoryOrAlphaSingerList(category, val);
   };
 
   // 上拉加载

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerList } from "../api/request";
+import { getAlbumDetailRequest, getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerList } from "../api/request";
 
 
 const useStore = create((set, get) => ({
@@ -95,11 +95,27 @@ const useStore = create((set, get) => ({
   rankList: [],
   rankLoading: false,
   rankSetRankList: async () => {
+    set({
+      rankLoading: true
+    })
     let data = await getRankList()
     set({
-      rankList: data.list
+      rankList: data.list,
+      rankLoading: false
     })
-  }
+  },
+  rankCurrentAlbum: [],
+  rankCurrentAlbumLoading: false,
+  rankSetCurrentAlbum: async (id) => {
+    set({
+      rankCurrentAlbumLoading: true
+    })
+    let data = await getAlbumDetailRequest(id)
+    set({
+      rankCurrentAlbumLoading: false,
+      rankCurrentAlbum: data.playlist
+    })
+  },
 }))
 
 export default useStore

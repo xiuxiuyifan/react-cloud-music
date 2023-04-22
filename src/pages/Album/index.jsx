@@ -59,7 +59,7 @@ function Album() {
         setIsMarquee(false);
       }
     },
-    [currentAlbum]
+    [rankCurrentAlbum]
   );
 
   const renderTopDesc = () => {

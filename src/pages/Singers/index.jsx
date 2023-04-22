@@ -7,6 +7,7 @@ import useStore from "../../store";
 import LazyLoad, { forceCheck } from "react-lazyload";
 import singerPng from "./singer.png";
 import { debounce } from "../../utils";
+import { Outlet, useNavigate } from "react-router-dom";
 
 // 渲染函数，返回歌手列表组件
 
@@ -27,11 +28,20 @@ const renderSingerList = () => {
       singerSetSingerHotList(0);
     }
   }, []);
+
+  const navigate = useNavigate();
+
+  const enterDetail = (id) => {
+    navigate(`/singers/${id}`);
+  };
   return (
     <List>
       {singerList.map((item, index) => {
         return (
-          <ListItem key={item.accountId + "" + index}>
+          <ListItem
+            key={item.accountId + "" + index}
+            onClick={() => enterDetail(item.id)}
+          >
             <div className="img_wrapper">
               <LazyLoad
                 placeholder={
@@ -141,6 +151,7 @@ function Singers() {
           {renderSingerList()}
         </Scroll>
       </ListContainer>
+      <Outlet></Outlet>
     </div>
   );
 }

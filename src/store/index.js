@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getAlbumDetailRequest, getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerList } from "../api/request";
+import { getAlbumDetailRequest, getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerInfoRequest, getSingerList } from "../api/request";
 
 
 const useStore = create((set, get) => ({
@@ -116,6 +116,22 @@ const useStore = create((set, get) => ({
       rankCurrentAlbum: data.playlist
     })
   },
+
+  // 歌手详情
+  artistsList: [],
+  artistsSongOfArtists: [],
+  artistsSetList: async (id) => {
+    set({
+      artistsLoading: true
+    })
+    let data = await getSingerInfoRequest(id)
+    set({
+      artistsLoading: false,
+      artistsList: data.artist,
+      artistsSongOfArtists: data.hotSongs
+    })
+  },
+  artistsLoading: false
 }))
 
 export default useStore

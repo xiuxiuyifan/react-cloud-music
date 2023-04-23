@@ -3,7 +3,6 @@ import axios from "axios";
 
 export const baseUrl = `${location.protocol}//${location.hostname}:3000`
 
-console.log(baseUrl)
 
 // 创建 axios 实例
 

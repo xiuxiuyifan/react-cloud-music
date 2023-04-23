@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { getAlbumDetailRequest, getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerInfoRequest, getSingerList } from "../api/request";
+import { playMode } from "../api/static";
 
 
 const useStore = create((set, get) => ({
@@ -131,7 +132,18 @@ const useStore = create((set, get) => ({
       artistsSongOfArtists: data.hotSongs
     })
   },
-  artistsLoading: false
+  artistsLoading: false,
+
+
+  // 播放器
+  playerFullScreen: false,  // 播放器是否全屏模式
+  playerPlaying: false,      // 当前歌曲是否播放
+  playerSequencePlayList: [], // 顺序列表(之后会有随机模式，列表会乱序，从这个列表拿回保存顺序)
+  playerPlayList: [],   // 播放列表
+  playerMode: playMode.sequence,  // 播放模式
+  playerCurrentIndex: -1, // 当前歌曲正在播放列表的索引
+  playerShowPlayList: [], // 是否展示播放列表
+  playerCurrentSong: {}   // 当前正在播放音乐的信息
 }))
 
 export default useStore

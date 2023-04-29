@@ -5,11 +5,13 @@ import {
   Middle,
   NormalPlayerContainer,
   Operators,
+  ProgressWrapper,
   Top,
 } from "./style";
 import { getName, prefixStyle } from "../../../utils";
 import { CSSTransition } from "react-transition-group";
 import animations from "create-keyframe-animation";
+import ProgressBar from "../../../baseUI/progress-bar";
 
 function NormalPlayer(props) {
   const { song, fullScreen, toggleFullScreen } = props;
@@ -82,6 +84,8 @@ function NormalPlayer(props) {
     const cdWrapperDom = cdWrapperRef.current;
     cdWrapperDom.style.transition = "all 0.4s";
     const { x, y, scale } = _getPosAndScale();
+    // 获取到动画结束的位置
+    // 直接设置给需要进行动画的DOM元素
     cdWrapperDom.style[
       transform
     ] = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
@@ -139,6 +143,13 @@ function NormalPlayer(props) {
           </CDWrapper>
         </Middle>
         <Bottom className="bottom">
+          <ProgressWrapper>
+            <span className="time time-l">0:00</span>
+            <div className="progress-bar-wrapper">
+              <ProgressBar percent={0.2}></ProgressBar>
+            </div>
+            <div className="time time-r">4:17</div>
+          </ProgressWrapper>
           <Operators>
             <div className="icon i-left">
               <i className="iconfont">&#xe625;</i>

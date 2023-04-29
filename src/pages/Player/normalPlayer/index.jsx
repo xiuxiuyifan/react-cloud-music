@@ -44,7 +44,6 @@ function NormalPlayer(props) {
   const enter = () => {
     normalPlayerRef.current.style.display = "block";
     const { x, y, scale } = _getPosAndScale(); // 获取 miniPlayer 图片中心相对 normalPlayer 唱片中心的偏移
-    console.log(x, y, scale);
     // 创建动画
     let animation = {
       0: {
@@ -103,6 +102,10 @@ function NormalPlayer(props) {
   const handleBack = () => {
     toggleFullScreen(false);
   };
+
+  const onPercentChange = (percent) => {
+    console.log(percent);
+  };
   return (
     <CSSTransition
       classNames="normal"
@@ -146,7 +149,10 @@ function NormalPlayer(props) {
           <ProgressWrapper>
             <span className="time time-l">0:00</span>
             <div className="progress-bar-wrapper">
-              <ProgressBar percent={0.2}></ProgressBar>
+              <ProgressBar
+                percent={0.2}
+                percentChange={onPercentChange}
+              ></ProgressBar>
             </div>
             <div className="time time-r">4:17</div>
           </ProgressWrapper>

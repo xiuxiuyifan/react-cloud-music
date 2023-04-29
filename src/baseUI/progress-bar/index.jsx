@@ -81,7 +81,7 @@ function ProgressBar(props) {
   // 计算新的进度，并把进度传递给回调函数
   const _changePercent = () => {
     // 进度条的总长度
-    const barWidth = progress.current.clientWidth - progressBtnWidth;
+    const barWidth = progressBar.current.clientWidth - progressBtnWidth;
     // 进度条当前的长度/总长度
     const curPercent = progress.current.clientWidth / barWidth;
     // 调用比例发生变化的钩子函数，告诉父组件当前最新的 percent (百分比)

@@ -5,11 +5,12 @@ import { CSSTransition } from "react-transition-group";
 import ProgressCircle from "../../../baseUI/progress-circle";
 
 function MiniPlayer(props) {
-  const { song, fullScreen, toggleFullScreen } = props;
+  const { song, fullScreen, percent, playing } = props;
+
+  const { toggleFullScreen, clickPlaying } = props;
 
   const miniPlayerRef = useRef();
 
-  const percent = 0.2;
   return (
     <CSSTransition
       in={!fullScreen}
@@ -30,7 +31,7 @@ function MiniPlayer(props) {
         <div className="icon">
           <div className="img_wrapper">
             <img
-              className="play"
+              className={`play ${playing ? "" : "pause"}`}
               src={song.al.picUrl}
               width="40"
               height="40"
@@ -44,7 +45,21 @@ function MiniPlayer(props) {
         </div>
         <div className="control">
           <ProgressCircle radius={32} percent={percent}>
-            <i className="iconfont icon-mini">&#xe650;</i>
+            {playing ? (
+              <i
+                className="iconfont icon-mini icon-pause"
+                onClick={(e) => clickPlaying(e, false)}
+              >
+                &#xe650;
+              </i>
+            ) : (
+              <i
+                className="iconfont icon-mini icon-play"
+                onClick={(e) => clickPlaying(e, true)}
+              >
+                &#xe61e;
+              </i>
+            )}
           </ProgressCircle>
         </div>
         <div className="control">

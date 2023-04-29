@@ -141,6 +141,11 @@ const useStore = create((set, get) => ({
     set({ playerFullScreen: visible })
   },
   playerPlaying: false,      // 当前歌曲是否播放
+  playerSetPlaying: (playing) => {
+    set({
+      playerPlaying: playing
+    })
+  },
   playerSequencePlayList: [], // 顺序列表(之后会有随机模式，列表会乱序，从这个列表拿回保存顺序)
   playerPlayList: [],   // 播放列表
   playerMode: playMode.sequence,  // 播放模式

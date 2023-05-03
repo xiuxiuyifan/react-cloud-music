@@ -150,8 +150,18 @@ const useStore = create((set, get) => ({
   playerPlayList: [],   // 播放列表
   playerMode: playMode.sequence,  // 播放模式
   playerCurrentIndex: -1, // 当前歌曲正在播放列表的索引
+  playerSetCurrentIndex: (index) => {
+    set({
+      playerCurrentIndex: index
+    })
+  },
   playerShowPlayList: [], // 是否展示播放列表
-  playerCurrentSong: {}   // 当前正在播放音乐的信息
+  playerCurrentSong: {},   // 当前正在播放音乐的信息
+  playerSetCurrentSong: (song) => {
+    set({
+      playerCurrentSong: song
+    })
+  }
 }))
 
 export default useStore

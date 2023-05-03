@@ -1,6 +1,8 @@
 import { memo, useRef, useState } from "react";
 import styled from "styled-components";
 import style from "../../assets/global-style";
+import { useEffect } from "react";
+import { prefixStyle } from "../../utils";
 
 const ProgressBarWrapper = styled.div`
   height: 30px;
@@ -8,7 +10,7 @@ const ProgressBarWrapper = styled.div`
     position: relative;
     top: 13px;
     height: 4px;
-    background: rgba (0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
     .progress {
       position: absolute;
       height: 100%;
@@ -16,7 +18,7 @@ const ProgressBarWrapper = styled.div`
     }
     .progress-btn-wrapper {
       position: absolute;
-      left: -15px;
+      left: -8px;
       top: -13px;
       width: 30px;
       height: 30px;
@@ -35,7 +37,11 @@ const ProgressBarWrapper = styled.div`
   }
 `;
 
+const transform = prefixStyle("transform");
+
 function ProgressBar(props) {
+  const { percent } = props;
+
   const { percentChange } = props;
 
   const progressBar = useRef();
@@ -106,6 +112,20 @@ function ProgressBar(props) {
     _offset(offsetWidth);
     _changePercent();
   };
+
+  // 监听 percent
+  useEffect(() => {
+    if (percent >= 0 && percent <= 1 && !touch.initiated) {
+      // 计算出进度条的最大长度
+      const barWidth = progressBar.current.clientWidth - progressBtnWidth;
+
+      const offsetWidth = percent * barWidth; // 根据比例计算出当前进度条的实际长度
+      progress.current.style.width = `${offsetWidth}px`;
+      progressBtn.current.style[
+        transform
+      ] = `translate3d(${offsetWidth}px, 0, 0)`;
+    }
+  }, [percent]);
 
   return (
     <ProgressBarWrapper>

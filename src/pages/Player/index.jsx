@@ -14,6 +14,7 @@ function Player(props) {
     playerPlaying,
     playerSetPlaying,
     playerCurrentIndex,
+    playerPlayList,
     playerSetCurrentIndex,
     playerCurrentSong,
     playerSetCurrentSong,
@@ -26,86 +27,11 @@ function Player(props) {
   // 歌曲播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
 
-  const playList = [
-    {
-      ftype: 0,
-      djId: 0,
-      a: null,
-      cd: "01",
-      crbt: null,
-      no: 1,
-      st: 0,
-      rt: "",
-      cf: "",
-      alia: ["手游《梦幻花园》苏州园林版推广曲"],
-      rtUrls: [],
-      fee: 0,
-      s_id: 0,
-      copyright: 0,
-      h: {
-        br: 320000,
-        fid: 0,
-        size: 9400365,
-        vd: -45814,
-      },
-      mv: 0,
-      al: {
-        id: 84991301,
-        name: "拾梦纪",
-        picUrl:
-          "http://p1.music.126.net/M19SOoRMkcHmJvmGflXjXQ==/109951164627180052.jpg",
-        tns: [],
-        pic_str: "109951164627180052",
-        pic: 109951164627180050,
-      },
-      name: "拾梦纪",
-      l: {
-        br: 128000,
-        fid: 0,
-        size: 3760173,
-        vd: -41672,
-      },
-      rtype: 0,
-      m: {
-        br: 192000,
-        fid: 0,
-        size: 5640237,
-        vd: -43277,
-      },
-      cp: 1416668,
-      mark: 0,
-      rtUrl: null,
-      mst: 9,
-      dt: 234947,
-      ar: [
-        {
-          id: 12084589,
-          name: "妖扬",
-          tns: [],
-          alias: [],
-        },
-        {
-          id: 12578371,
-          name: "金天",
-          tns: [],
-          alias: [],
-        },
-      ],
-      pop: 5,
-      pst: 0,
-      t: 0,
-      v: 3,
-      id: 1416767593,
-      publishTime: 0,
-      rurl: null,
-    },
-  ];
-
   const clickPlaying = (e, playing) => {
     e.stopPropagation();
     // 如果音乐没有播放，则让音乐播放
     if (!playerPlaying) {
-      let current = playList[0];
+      let current = playerPlayList[0];
 
       // 切换播放状态
       playerSetPlaying(true);
@@ -121,9 +47,10 @@ function Player(props) {
   const audioRef = useRef();
 
   useEffect(() => {
+    console.log(playerPlayList);
     if (!playerCurrentSong) return;
     playerSetCurrentIndex(0); // 默认当前播放值为 -1 页面一加载改成 0
-    let current = playList[0];
+    let current = playerPlayList[0];
     playerSetCurrentSong(current);
     audioRef.current.src = getSongUrl(current.id);
   }, []);
@@ -134,7 +61,8 @@ function Player(props) {
   }, [playerPlaying]);
 
   const updateTime = (e) => {
-    setCurrentTime(e.target.currentTime);
+    let currentTime = e.target.currentTime;
+    setCurrentTime(currentTime);
   };
 
   const onProgressChange = (curPercent) => {
@@ -145,6 +73,46 @@ function Player(props) {
     if (!playerPlaying) {
       playerSetPlaying(true);
     }
+  };
+
+  // 一首歌循环
+  const handleLoop = () => {
+    audioRef.current.currentTime = 0;
+    playerSetPlaying(true);
+    audioRef.current.play();
+  };
+
+  // 前一首歌曲
+  const handlePrev = () => {
+    // 如果只有一首歌曲，则循环播放
+    if (playerPlayList.length === 1) {
+      handleLoop();
+      return;
+    }
+    // 否则计算出最新的 index
+    let index = playerCurrentIndex - 1;
+    // 当向前的时候超出了边界的时候，将 index 设置为歌曲列表的最后一个
+    if (index < 0) {
+      index = playerPlayList.length - 1;
+    }
+    // 如果当前没有播放，则让音乐开始播放
+    if (!playerPlaying) playerSetPlaying(true);
+    // 更改当前播放音乐的索引
+    playerSetCurrentIndex(index);
+  };
+
+  // 下一首歌曲
+  const handleNext = () => {
+    // 如果只有一首歌曲，则循环播放
+    if (playerPlayList.length === 1) {
+      handleLoop();
+      return;
+    }
+    let index = playerCurrentIndex + 1;
+    // 判断如果当前播放的 index 到了最后一个，则重置为 第一个(0)
+    if (index === playerPlayList.length) playerCurrentIndex = 0;
+    if (!playerPlaying) playerSetPlaying(true);
+    playerSetCurrentIndex(index);
   };
 
   return (
@@ -172,6 +140,8 @@ function Player(props) {
           toggleFullScreen={playerSetFullScreen}
           clickPlaying={clickPlaying}
           onProgressChange={onProgressChange}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
         ></NormalPlayer>
       )}
       <audio ref={audioRef} onTimeUpdate={updateTime}></audio>

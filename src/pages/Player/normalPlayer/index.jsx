@@ -18,7 +18,13 @@ const transform = prefixStyle("transform");
 function NormalPlayer(props) {
   const { song, fullScreen, playing, currentTime, duration, percent } = props;
 
-  const { clickPlaying, toggleFullScreen, onProgressChange } = props;
+  const {
+    clickPlaying,
+    toggleFullScreen,
+    onProgressChange,
+    handlePrev,
+    handleNext,
+  } = props;
 
   const normalPlayerRef = useRef();
   const cdWrapperRef = useRef();
@@ -159,7 +165,7 @@ function NormalPlayer(props) {
             <div className="icon i-left">
               <i className="iconfont">&#xe625;</i>
             </div>
-            <div className="icon i-left">
+            <div className="icon i-left" onClick={handlePrev}>
               <i className="iconfont">&#xe6e1;</i>
             </div>
             <div className="icon i-center">
@@ -171,7 +177,7 @@ function NormalPlayer(props) {
                 }}
               ></i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={handleNext}>
               <i className="iconfont">&#xe718;</i>
             </div>
             <div className="icon i-right">

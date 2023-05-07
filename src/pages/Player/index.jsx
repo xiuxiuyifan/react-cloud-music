@@ -24,19 +24,17 @@ function Player(props) {
   const [currentTime, setCurrentTime] = useState(0);
   // 歌曲总时长
   const [duration, setDuration] = useState(0);
-  // 歌曲播放进度
+
+  const [preSong, setPreSong] = useState({});
+
+  // 歌曲播放进度 , 当目前播放时间变化之后会重新刷新当前组件 重新 render, 然后重新计算播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
 
   const clickPlaying = (e, playing) => {
     e.stopPropagation();
     // 如果音乐没有播放，则让音乐播放
     if (!playerPlaying) {
-      let current = playerPlayList[0];
-
       // 切换播放状态
-      playerSetPlaying(true);
-      setCurrentTime(0);
-      setDuration((current.dt / 1000) | 0); // 计算出时长
       audioRef.current.play(); // 播放音乐
     } else {
       audioRef.current.pause(); // 暂停音乐
@@ -47,18 +45,43 @@ function Player(props) {
   const audioRef = useRef();
 
   useEffect(() => {
-    console.log(playerPlayList);
-    if (!playerCurrentSong) return;
-    playerSetCurrentIndex(0); // 默认当前播放值为 -1 页面一加载改成 0
-    let current = playerPlayList[0];
-    playerSetCurrentSong(current);
-    audioRef.current.src = getSongUrl(current.id);
+    // 设置当前播放的索引为0
+    playerSetCurrentIndex(0);
   }, []);
 
   // 控制音乐的暂停和播放
   useEffect(() => {
     playerPlaying ? audioRef.current.play() : audioRef.current.pause();
   }, [playerPlaying]);
+
+  // 当前播放的音乐发生变化的时候，监听 currentIndex 和 播放列表变化
+  useEffect(() => {
+    // 进行一些边界判断
+    if (
+      !playerPlayList.length ||
+      playerCurrentIndex === -1 ||
+      !playerPlayList[playerCurrentIndex] ||
+      playerPlayList[playerCurrentIndex].id === preSong.id
+    ) {
+      return;
+    }
+    // 取出当前正在播放的歌曲
+    const current = playerPlayList[playerCurrentIndex];
+    // 更新当前正在播放的音乐
+    playerSetCurrentSong(current);
+    setPreSong(current);
+    // 设置播放器播放音乐的路径
+    audioRef.current.src = getSongUrl(current.id);
+    setTimeout(() => {
+      audioRef.current.play();
+    });
+    // 切换播放状态
+    playerSetPlaying(true);
+    // 从头开始播放
+    setCurrentTime(0);
+    // 设置播放总时长
+    setDuration((current.dt / 1000) | 0);
+  }, [playerPlayList, playerCurrentIndex]);
 
   const updateTime = (e) => {
     let currentTime = e.target.currentTime;

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-export const baseUrl = `${location.protocol}//${location.hostname}:3000`
+export const baseUrl = `${location.protocol}//${location.hostname}:3001`
 
 
 // 创建 axios 实例

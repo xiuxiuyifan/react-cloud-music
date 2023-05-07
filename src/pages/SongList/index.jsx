@@ -1,13 +1,22 @@
 import { forwardRef, memo } from "react";
 import { SongItem, SongList } from "./style";
 import { getName } from "../../utils";
+import useStore from "../../store";
 
 const SongsList = forwardRef((props, refs) => {
   const { collectCount, showCollect, songs } = props;
   const totalCount = songs.length;
 
+  const { playerSerPlayList, playerSetCurrentSong, playerSetCurrentIndex } =
+    useStore();
+
   const selectItem = (e, index) => {
-    console.log(index);
+    // 点击音乐 item 的时候播放当前音乐
+    // 和当前播放的索引
+    let song = songs[index];
+    playerSerPlayList(songs);
+    playerSetCurrentSong(song);
+    playerSetCurrentIndex(index);
   };
 
   let songList = (list) => {

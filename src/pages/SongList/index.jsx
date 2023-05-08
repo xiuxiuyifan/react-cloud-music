@@ -7,14 +7,19 @@ const SongsList = forwardRef((props, refs) => {
   const { collectCount, showCollect, songs } = props;
   const totalCount = songs.length;
 
-  const { playerSerPlayList, playerSetCurrentSong, playerSetCurrentIndex } =
-    useStore();
+  const {
+    playerSetPlayList,
+    playerSetCurrentSong,
+    playerSetCurrentIndex,
+    playerSetSequencePlayList,
+  } = useStore();
 
   const selectItem = (e, index) => {
     // 点击音乐 item 的时候播放当前音乐
     // 和当前播放的索引
     let song = songs[index];
-    playerSerPlayList(songs);
+    playerSetPlayList(songs);
+    playerSetSequencePlayList(songs);
     playerSetCurrentSong(song);
     playerSetCurrentIndex(index);
   };

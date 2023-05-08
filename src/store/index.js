@@ -147,13 +147,23 @@ const useStore = create((set, get) => ({
     })
   },
   playerSequencePlayList: [], // 顺序列表(之后会有随机模式，列表会乱序，从这个列表拿回保存顺序)
+  playerSetSequencePlayList: (sequenceList) => {
+    set({
+      playerSequencePlayList: sequenceList
+    })
+  },
   playerPlayList: [],   // 播放列表
-  playerSerPlayList: (list) => {
+  playerSetPlayList: (list) => {
     set({
       playerPlayList: list
     })
   },
   playerMode: playMode.sequence,  // 播放模式
+  playerSetMode: (mode) => {
+    set({
+      playerMode: mode
+    })
+  },
   playerCurrentIndex: -1, // 当前歌曲正在播放列表的索引
   playerSetCurrentIndex: (index) => {
     set({

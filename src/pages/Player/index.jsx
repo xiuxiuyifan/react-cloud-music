@@ -5,7 +5,12 @@ import useStore from "../../store";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { getSongUrl, isEmptyObject } from "../../utils";
+import {
+  findIndex,
+  getSongUrl,
+  isEmptyObject,
+  shuffleArray,
+} from "../../utils";
 
 function Player(props) {
   const {
@@ -15,9 +20,14 @@ function Player(props) {
     playerSetPlaying,
     playerCurrentIndex,
     playerPlayList,
+    playerSetPlayList,
     playerSetCurrentIndex,
     playerCurrentSong,
     playerSetCurrentSong,
+    playerMode,
+    playerSetMode,
+    playerSequencePlayList,
+    playerSetSequencePlayList,
   } = useStore();
 
   // 目前播放时间
@@ -138,6 +148,29 @@ function Player(props) {
     playerSetCurrentIndex(index);
   };
 
+  const changeMode = () => {
+    const newMode = (playerMode + 1) % 3; // 目标值只有两个，可以对 3 进行取余 等于 3 的时候取余等于0，就相当于又归零了。
+    if (newMode === 0) {
+      // 顺序模式
+      playerSetPlayList(playerSequencePlayList);
+      // 查找当前播放歌曲在播放列表中的位置
+      let index = findIndex(playerCurrentSong, playerSequencePlayList);
+      playerSetCurrentIndex(index);
+    } else if (newMode === 1) {
+      //
+      playerSetPlayList(playerSequencePlayList);
+    } else if (newMode === 2) {
+      // 随机播放
+      // 生成一个新的数组
+      let newList = shuffleArray(playerSequencePlayList);
+      // 找当前播放的歌曲在随机后列表中的位置
+      let index = findIndex(playerCurrentSong, newList);
+      playerSetPlayList(newList);
+      playerSetCurrentIndex(index);
+    }
+    playerSetMode(newMode);
+  };
+
   return (
     <div>
       {isEmptyObject(playerCurrentSong) ? null : (
@@ -160,11 +193,13 @@ function Player(props) {
           playing={playerPlaying}
           currentTime={currentTime}
           duration={duration}
+          mode={playerMode}
           toggleFullScreen={playerSetFullScreen}
           clickPlaying={clickPlaying}
           onProgressChange={onProgressChange}
           handlePrev={handlePrev}
           handleNext={handleNext}
+          changeMode={changeMode}
         ></NormalPlayer>
       )}
       <audio ref={audioRef} onTimeUpdate={updateTime}></audio>

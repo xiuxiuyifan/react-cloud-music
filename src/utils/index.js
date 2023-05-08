@@ -91,3 +91,22 @@ export const formatPlayTime = (interval) => {
   const second = (interval % 60).toString().padStart(2, "0")
   return `${minute}:${second}`
 }
+
+// 找到当前歌曲在歌曲列表中的索引位置
+export const findIndex = (song, list) => {
+  return list.findIndex(item => {
+    return song.id === item.id
+  })
+}
+
+// 每次随机一个位置，并与数组末尾的元素进行交换，然后缩小排序范围
+export function shuffleArray(array) {
+  let ret = [...array]
+  for (let i = ret.length - 1; i > 0; i--) {
+    // 随机一个位置
+    let j = Math.floor(Math.random() * (i + 1));
+    // 和元素末尾的交换位置
+    [ret[i], ret[j]] = [ret[j], ret[i]]
+  }
+  return ret
+}

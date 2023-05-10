@@ -11,6 +11,8 @@ import {
   isEmptyObject,
   shuffleArray,
 } from "../../utils";
+import Toast from "../../baseUI/toast";
+import { playMode } from "../../api/static";
 
 function Player(props) {
   const {
@@ -36,6 +38,11 @@ function Player(props) {
   const [duration, setDuration] = useState(0);
 
   const [preSong, setPreSong] = useState({});
+
+  // 切换播放模式，显示 toast 内容
+  const [modeText, setModeText] = useState("");
+
+  const toastRef = useRef();
 
   // 歌曲播放进度 , 当目前播放时间变化之后会重新刷新当前组件 重新 render, 然后重新计算播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
@@ -156,9 +163,11 @@ function Player(props) {
       // 查找当前播放歌曲在播放列表中的位置
       let index = findIndex(playerCurrentSong, playerSequencePlayList);
       playerSetCurrentIndex(index);
+      setModeText("顺序循环");
     } else if (newMode === 1) {
       //
       playerSetPlayList(playerSequencePlayList);
+      setModeText("单曲循环");
     } else if (newMode === 2) {
       // 随机播放
       // 生成一个新的数组
@@ -167,8 +176,18 @@ function Player(props) {
       let index = findIndex(playerCurrentSong, newList);
       playerSetPlayList(newList);
       playerSetCurrentIndex(index);
+      setModeText("随机播放");
     }
     playerSetMode(newMode);
+    toastRef.current.show();
+  };
+
+  const handleEnd = () => {
+    if (mode === playMode.loop) {
+      handleLoop();
+    } else {
+      handleNext();
+    }
   };
 
   return (
@@ -202,7 +221,12 @@ function Player(props) {
           changeMode={changeMode}
         ></NormalPlayer>
       )}
-      <audio ref={audioRef} onTimeUpdate={updateTime}></audio>
+      <audio
+        ref={audioRef}
+        onTimeUpdate={updateTime}
+        onEnded={handleEnd}
+      ></audio>
+      <Toast ref={toastRef} text={modeText}></Toast>
     </div>
   );
 }

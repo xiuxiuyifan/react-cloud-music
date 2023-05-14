@@ -15,6 +15,7 @@ import SongList from "../SongList";
 import { HEADER_HEIGHT } from "../Album";
 import useStore from "../../store";
 import Loading from "../../baseUI/loading";
+import MusicNote from "../../baseUI/music-note";
 
 function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
@@ -101,6 +102,11 @@ function Singer(props) {
     }
   }, []);
 
+  const musicNoteRef = useRef();
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  };
   return (
     <CSSTransition
       in={showStatus}
@@ -129,10 +135,12 @@ function Singer(props) {
             <SongList
               songs={artistsSongOfArtists}
               showCollect={false}
+              musicAnimation={musicAnimation}
             ></SongList>
           </Scroll>
         </SongListWrapper>
         {artistsLoading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );

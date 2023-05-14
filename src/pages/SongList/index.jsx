@@ -4,7 +4,7 @@ import { getName } from "../../utils";
 import useStore from "../../store";
 
 const SongsList = forwardRef((props, refs) => {
-  const { collectCount, showCollect, songs } = props;
+  const { collectCount, showCollect, songs, musicAnimation } = props;
   const totalCount = songs.length;
 
   const {
@@ -22,6 +22,7 @@ const SongsList = forwardRef((props, refs) => {
     playerSetSequencePlayList(songs);
     playerSetCurrentSong(song);
     playerSetCurrentIndex(index);
+    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   };
 
   let songList = (list) => {

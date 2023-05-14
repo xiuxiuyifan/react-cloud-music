@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Container, Menu, SongItem, SongList, TopDesc } from "./style";
+import { Container, Menu, TopDesc } from "./style";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import useStore from "../../store";
 import Loading from "../../baseUI/loading";
 import { useCallback } from "react";
+import SongList from "../SongList";
+import MusicNote from "../../baseUI/music-note";
 
 export const HEADER_HEIGHT = 45;
 
@@ -27,6 +29,8 @@ function Album() {
   const { id } = useParams();
 
   const headerEl = useRef();
+
+  const musicNoteRef = useRef();
 
   const onExit = () => {
     navigate(-1);
@@ -115,44 +119,16 @@ function Album() {
   };
 
   const renderSongList = () => {
+    const musicAnimation = (x, y) => {
+      musicNoteRef.current.startAnimation({ x, y });
+    };
     return (
-      <SongList>
-        <div className="first_line">
-          <div className="play_all">
-            <i className="iconfont">&#xe6e3;</i>
-            <span>
-              {" "}
-              播放全部{" "}
-              <span className="sum">
-                (共 {rankCurrentAlbum.tracks.length} 首)
-              </span>
-            </span>
-          </div>
-          <div className="add_list">
-            <i className="iconfont">&#xe62d;</i>
-            <span>
-              {" "}
-              收藏 ({Math.floor(rankCurrentAlbum.subscribedCount / 1000) / 10}万
-              )
-            </span>
-          </div>
-        </div>
-        <SongItem>
-          {rankCurrentAlbum.tracks.map((item, index) => {
-            return (
-              <li key={index}>
-                <span className="index">{index + 1}</span>
-                <div className="info">
-                  <span>{item.name}</span>
-                  <span>
-                    {getName(item.ar)} - {item.al.name}
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </SongItem>
-      </SongList>
+      <SongList
+        showCollect={true}
+        songs={rankCurrentAlbum.tracks}
+        collectCount={rankCurrentAlbum.subscribedCount}
+        musicAnimation={musicAnimation}
+      ></SongList>
     );
   };
 
@@ -182,6 +158,7 @@ function Album() {
           </Scroll>
         ) : null}
         {rankCurrentAlbumLoading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );

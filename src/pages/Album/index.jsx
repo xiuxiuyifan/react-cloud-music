@@ -22,8 +22,12 @@ function Album() {
   const [visible, setVisible] = useState(true);
   const [title, setTitle] = useState("歌单");
   const [isMarquee, setIsMarquee] = useState(false); // 是否跑马灯
-  const { rankCurrentAlbum, rankCurrentAlbumLoading, rankSetCurrentAlbum } =
-    useStore();
+  const {
+    rankCurrentAlbum,
+    rankCurrentAlbumLoading,
+    rankSetCurrentAlbum,
+    playerPlayList,
+  } = useStore();
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -141,7 +145,7 @@ function Album() {
       onExited={onExit}
       appear
     >
-      <Container>
+      <Container play={playerPlayList.length}>
         <Header
           ref={headerEl}
           title={title}

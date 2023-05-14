@@ -44,6 +44,8 @@ function Player(props) {
 
   const toastRef = useRef();
 
+  const songReady = useRef(true);
+
   // 歌曲播放进度 , 当目前播放时间变化之后会重新刷新当前组件 重新 render, 然后重新计算播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
 
@@ -78,7 +80,8 @@ function Player(props) {
       !playerPlayList.length ||
       playerCurrentIndex === -1 ||
       !playerPlayList[playerCurrentIndex] ||
-      playerPlayList[playerCurrentIndex].id === preSong.id
+      playerPlayList[playerCurrentIndex].id === preSong.id ||
+      !songReady.current // 没有准备好
     ) {
       return;
     }
@@ -87,10 +90,14 @@ function Player(props) {
     // 更新当前正在播放的音乐
     playerSetCurrentSong(current);
     setPreSong(current);
+    // 把标志位设置为 false 表示当前正在 缓冲
+    songReady.current = false;
     // 设置播放器播放音乐的路径
     audioRef.current.src = getSongUrl(current.id);
     setTimeout(() => {
-      audioRef.current.play();
+      audioRef.current.play().then(() => {
+        songReady.current = true;
+      });
     });
     // 切换播放状态
     playerSetPlaying(true);
@@ -183,11 +190,17 @@ function Player(props) {
   };
 
   const handleEnd = () => {
-    if (playMode === playMode.loop) {
+    console.log(playerMode);
+    if (playerMode === playMode.loop) {
       handleLoop();
     } else {
       handleNext();
     }
+  };
+
+  const handleError = () => {
+    songReady.current = true;
+    alert("播放出错");
   };
 
   return (
@@ -225,6 +238,7 @@ function Player(props) {
         ref={audioRef}
         onTimeUpdate={updateTime}
         onEnded={handleEnd}
+        onError={handleError}
       ></audio>
       <Toast ref={toastRef} text={modeText}></Toast>
     </div>

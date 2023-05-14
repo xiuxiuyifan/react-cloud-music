@@ -7,7 +7,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "../../baseUI/loading";
 
 function Rank() {
-  const { rankLoading, rankList, rankSetRankList } = useStore();
+  const { rankLoading, rankList, rankSetRankList, playerPlayList } = useStore();
 
   const navigate = useNavigate();
 
@@ -62,7 +62,7 @@ function Rank() {
   }, []);
 
   return (
-    <Container>
+    <Container play={playerPlayList.length}>
       <Scroll>
         <div>
           <h1 className="offical" style={displayStyle}>

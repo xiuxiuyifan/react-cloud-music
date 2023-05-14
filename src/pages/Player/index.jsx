@@ -183,7 +183,7 @@ function Player(props) {
   };
 
   const handleEnd = () => {
-    if (mode === playMode.loop) {
+    if (playMode === playMode.loop) {
       handleLoop();
     } else {
       handleNext();

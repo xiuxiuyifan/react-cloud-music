@@ -84,6 +84,7 @@ function Singers() {
     singerSetPageCount,
     singerSetSingerHotListPullUp,
     singerSetCategoryOrAlphaSingerListPullUp,
+    playerPlayList,
   } = useStore();
   const singerListRef = useRef(null);
 
@@ -139,7 +140,7 @@ function Singers() {
           handleClick={handleUpdateAlpha}
         ></Horizon>
       </NavContainer>
-      <ListContainer>
+      <ListContainer play={playerPlayList.length}>
         <Scroll
           ref={singerListRef}
           pullUp={handlePullUp}

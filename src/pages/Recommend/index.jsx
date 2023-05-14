@@ -14,6 +14,7 @@ function Recommend() {
     recommendList,
     initRecommendList,
     recommendLoading,
+    playerPlayList,
   } = useStore();
 
   // 页面初始化
@@ -27,7 +28,7 @@ function Recommend() {
   }, []);
 
   return (
-    <Content className="list">
+    <Content className="list" play={playerPlayList.length}>
       {recommendLoading ? <Loading></Loading> : null}
       <Scroll onScroll={forceCheck}>
         <div>

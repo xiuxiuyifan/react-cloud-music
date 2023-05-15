@@ -176,6 +176,14 @@ const useStore = create((set, get) => ({
     set({
       playerCurrentSong: song
     })
+  },
+
+  // 播放列表
+  playListVisible: false,
+  playListSetVisible: (visible) => {
+    set({
+      playListVisible: visible
+    })
   }
 }))
 

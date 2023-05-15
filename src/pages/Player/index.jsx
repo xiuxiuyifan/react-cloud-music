@@ -13,6 +13,7 @@ import {
 } from "../../utils";
 import Toast from "../../baseUI/toast";
 import { playMode } from "../../api/static";
+import PlayList from "./playList";
 
 function Player(props) {
   const {
@@ -30,6 +31,7 @@ function Player(props) {
     playerSetMode,
     playerSequencePlayList,
     playerSetSequencePlayList,
+    playListSetVisible,
   } = useStore();
 
   // 目前播放时间
@@ -215,6 +217,7 @@ function Player(props) {
           duration={duration}
           toggleFullScreen={playerSetFullScreen}
           clickPlaying={clickPlaying}
+          togglePlayList={playListSetVisible}
         ></MiniPlayer>
       )}
       {isEmptyObject(playerCurrentSong) ? null : (
@@ -232,8 +235,10 @@ function Player(props) {
           handlePrev={handlePrev}
           handleNext={handleNext}
           changeMode={changeMode}
+          togglePlayList={playListSetVisible}
         ></NormalPlayer>
       )}
+      <PlayList></PlayList>
       <audio
         ref={audioRef}
         onTimeUpdate={updateTime}

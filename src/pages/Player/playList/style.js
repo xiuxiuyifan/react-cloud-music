@@ -19,10 +19,7 @@ export const PlayListWrapper = styled.div`
   &.list-fade-exit{
     opacity: 1;
   }
-  &.list-fade-exit-active{
-    opacity: 0;
-    transition: all 0.3s;
-  }
+   
 
   .list_wrapper {
     position: absolute;

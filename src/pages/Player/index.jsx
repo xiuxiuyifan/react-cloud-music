@@ -192,7 +192,6 @@ function Player(props) {
   };
 
   const handleEnd = () => {
-    console.log(playerMode);
     if (playerMode === playMode.loop) {
       handleLoop();
     } else {
@@ -203,6 +202,7 @@ function Player(props) {
   const handleError = () => {
     songReady.current = true;
     alert("播放出错");
+    playerSetPlaying(false);
   };
 
   return (

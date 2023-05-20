@@ -26,6 +26,7 @@ function PlayList(props) {
     playerPlayList,
     playerSequencePlayList,
     playerMode,
+    playerDeleteSong,
   } = useStore();
   const [isShow, setIsShow] = useState(false);
   const playListRef = useRef();
@@ -108,6 +109,12 @@ function PlayList(props) {
     // 改变当前正在播放的音乐
     playerSetCurrentIndex(index);
   };
+
+  // 删除一首歌曲
+  const handleDeleteSong = (e, song) => {
+    e.stopPropagation();
+    playerDeleteSong(song);
+  };
   return (
     <CSSTransition
       in={playListVisible}
@@ -153,7 +160,10 @@ function PlayList(props) {
                       <span className="like">
                         <i className="iconfont">&#xe601;</i>
                       </span>
-                      <span className="delete">
+                      <span
+                        className="delete"
+                        onClick={(e) => handleDeleteSong(e, item)}
+                      >
                         <i className="iconfont">&#xe63d;</i>
                       </span>
                     </li>

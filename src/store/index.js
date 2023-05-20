@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { getAlbumDetailRequest, getBannerList, getHotSingerList, getRankList, getRecommendList, getSingerInfoRequest, getSingerList } from "../api/request";
 import { playMode } from "../api/static";
+import { findIndex } from "../utils";
 
 
 const useStore = create((set, get) => ({
@@ -175,6 +176,22 @@ const useStore = create((set, get) => ({
   playerSetCurrentSong: (song) => {
     set({
       playerCurrentSong: song
+    })
+  },
+  // 删除歌曲
+  playerDeleteSong: (song) => {
+    let { playerPlayList, playerSequencePlayList, playerCurrentIndex } = get()
+    // 找到当前正在播放的列表中的歌曲将其删掉
+    let fpIndex = findIndex(song, playerPlayList)
+    playerPlayList.splice(fpIndex, 1)
+
+    // 在顺序列表中的话，直接将其删掉
+    const fsIndex = findIndex(song, playerSequencePlayList)
+    playerSequencePlayList.splice(fsIndex, 1)
+    set({
+      playerPlayList,
+      playerSequencePlayList,
+      playerCurrentIndex
     })
   },
 

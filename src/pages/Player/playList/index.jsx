@@ -1,11 +1,16 @@
 import { memo } from "react";
-import { PlayListWrapper, ScrollWrapper } from "./style";
+import {
+  ListContent,
+  ListHeader,
+  PlayListWrapper,
+  ScrollWrapper,
+} from "./style";
 import { useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import useStore from "../../../store";
 import { useCallback } from "react";
 import { useRef } from "react";
-import { prefixStyle } from "../../../utils";
+import { getName, prefixStyle } from "../../../utils";
 import Scroll from "../../../baseUI/scroll";
 import { playMode } from "../../../api/static";
 
@@ -63,10 +68,10 @@ function PlayList(props) {
 
   const getPlayMode = () => {
     let content, text;
-    if (mode === playMode.sequence) {
+    if (playerMode === playMode.sequence) {
       content = "&#xe625;";
       text = "顺序播放";
-    } else if (mode === playMode.loop) {
+    } else if (playerMode === playMode.loop) {
       content = "&#xe653;";
       text = "单曲循环";
     } else {
@@ -90,6 +95,8 @@ function PlayList(props) {
   const changeMode = (e) => {
     let newMode = (playMode + 1) % 3;
   };
+
+  const handleShowClear = () => {};
   return (
     <CSSTransition
       in={playListVisible}

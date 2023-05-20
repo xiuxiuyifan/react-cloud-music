@@ -21,6 +21,7 @@ function PlayList(props) {
     playListVisible,
     playListSetVisible,
     playerCurrentIndex,
+    playerSetCurrentIndex,
     playerCurrentSong,
     playerPlayList,
     playerSequencePlayList,
@@ -35,23 +36,23 @@ function PlayList(props) {
     setIsShow(true);
     // 最开始的时候是隐藏在下面的
     listWrapperRef.current.style[transform] = `translate3d(0, 100%, 0)`;
-  });
+  }, [transform]);
 
   const onEnteringCB = useCallback(() => {
     // 动画进行的过程中
     listWrapperRef.current.style["transition"] = "all 0.3s";
     listWrapperRef.current.style[transform] = `translate3d(0, 0, 0)`;
-  });
+  }, [transform]);
 
   const onExitingCB = useCallback(() => {
     listWrapperRef.current.style["transition"] = "all 0.3s";
     listWrapperRef.current.style[transform] = `translate3d(0, 0, 0)`;
-  });
+  }, [transform]);
 
   const onExitedCB = useCallback(() => {
     setIsShow(false);
     listWrapperRef.current.style[transform] = `translate3d(0, 100%, 0)`;
-  });
+  }, [transform]);
 
   const getCurrentIcon = (item) => {
     // 是不是当前正在播放的歌曲
@@ -97,6 +98,16 @@ function PlayList(props) {
   };
 
   const handleShowClear = () => {};
+
+  // 点击切换歌曲
+  const handleChangeCurrentIndex = (index) => {
+    console.log(index);
+    if (playerCurrentIndex === index) {
+      return;
+    }
+    // 改变当前正在播放的音乐
+    playerSetCurrentIndex(index);
+  };
   return (
     <CSSTransition
       in={playListVisible}
@@ -112,7 +123,11 @@ function PlayList(props) {
         style={isShow === true ? { display: "block" } : { display: "none" }}
         onClick={() => playListSetVisible(false)}
       >
-        <div ref={listWrapperRef} className="list_wrapper">
+        <div
+          ref={listWrapperRef}
+          className="list_wrapper"
+          onClick={(e) => e.stopPropagation()}
+        >
           <ListHeader>
             <h1 className="title">
               {getPlayMode()}
@@ -126,7 +141,11 @@ function PlayList(props) {
               <ListContent>
                 {playerPlayList.map((item, index) => {
                   return (
-                    <li className="item" key={item.id}>
+                    <li
+                      className="item"
+                      key={item.id}
+                      onClick={() => handleChangeCurrentIndex(index)}
+                    >
                       {getCurrentIcon(item)}
                       <span className="text">
                         {item.name} - {getName(item.ar)}

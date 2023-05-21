@@ -10,7 +10,7 @@ import { CSSTransition } from "react-transition-group";
 import useStore from "../../../store";
 import { useCallback } from "react";
 import { useRef } from "react";
-import { getName, prefixStyle } from "../../../utils";
+import { findIndex, getName, prefixStyle, shuffleArray } from "../../../utils";
 import Scroll from "../../../baseUI/scroll";
 import { playMode } from "../../../api/static";
 import Confirm from "../../../baseUI/confirm";
@@ -25,7 +25,10 @@ function PlayList(props) {
     playerSetCurrentIndex,
     playerCurrentSong,
     playerPlayList,
+    playerSetPlayList,
+    playerSequencePlayList,
     playerMode,
+    playerSetMode,
     playerDeleteSong,
     playerClear,
   } = useStore();
@@ -97,7 +100,26 @@ function PlayList(props) {
   };
 
   const changeMode = (e) => {
-    let newMode = (playMode + 1) % 3;
+    const newMode = (playerMode + 1) % 3; // 目标值只有两个，可以对 3 进行取余 等于 3 的时候取余等于0，就相当于又归零了。
+    if (newMode === 0) {
+      // 顺序模式
+      playerSetPlayList(playerSequencePlayList);
+      // 查找当前播放歌曲在播放列表中的位置
+      let index = findIndex(playerCurrentSong, playerSequencePlayList);
+      playerSetCurrentIndex(index);
+    } else if (newMode === 1) {
+      //
+      playerSetPlayList(playerSequencePlayList);
+    } else if (newMode === 2) {
+      // 随机播放
+      // 生成一个新的数组
+      let newList = shuffleArray(playerSequencePlayList);
+      // 找当前播放的歌曲在随机后列表中的位置
+      let index = findIndex(playerCurrentSong, newList);
+      playerSetPlayList(newList);
+      playerSetCurrentIndex(index);
+    }
+    playerSetMode(newMode);
   };
 
   const handleShowClear = () => {

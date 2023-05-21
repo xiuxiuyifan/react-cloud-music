@@ -194,6 +194,17 @@ const useStore = create((set, get) => ({
       playerCurrentIndex
     })
   },
+  // 清空播放列表
+  playerClear: () => {
+    set({
+      playerPlayList: [],  // 清空正在播放的列表
+      playerSequencePlayList: [], // 清空顺序播放的列表
+      playerCurrentIndex: -1,  // 重置当前正在播放的索引
+      playListVisible: false, // 关闭 playList 的显示
+      playerCurrentSong: {},  // 把当前正在播放的歌曲置空
+      playerPlaying: false   // 重置当前播放状态
+    })
+  },
 
   // 播放列表
   playListVisible: false,

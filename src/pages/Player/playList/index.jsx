@@ -13,6 +13,7 @@ import { useRef } from "react";
 import { getName, prefixStyle } from "../../../utils";
 import Scroll from "../../../baseUI/scroll";
 import { playMode } from "../../../api/static";
+import Confirm from "../../../baseUI/confirm";
 
 const transform = prefixStyle("transform");
 
@@ -24,13 +25,14 @@ function PlayList(props) {
     playerSetCurrentIndex,
     playerCurrentSong,
     playerPlayList,
-    playerSequencePlayList,
     playerMode,
     playerDeleteSong,
+    playerClear,
   } = useStore();
   const [isShow, setIsShow] = useState(false);
   const playListRef = useRef();
   const listWrapperRef = useRef();
+  const confirmRef = useRef();
 
   const onEnterCB = useCallback(() => {
     // 让列表显示出来
@@ -98,7 +100,13 @@ function PlayList(props) {
     let newMode = (playMode + 1) % 3;
   };
 
-  const handleShowClear = () => {};
+  const handleShowClear = () => {
+    confirmRef.current.show();
+  };
+
+  const handleConfirmClear = () => {
+    playerClear();
+  };
 
   // 点击切换歌曲
   const handleChangeCurrentIndex = (index) => {
@@ -173,6 +181,13 @@ function PlayList(props) {
             </Scroll>
           </ScrollWrapper>
         </div>
+        <Confirm
+          ref={confirmRef}
+          text="是否全部删除？"
+          cancelBtnText="取消"
+          confirmBtnText="确定"
+          handleConfirm={handleConfirmClear}
+        ></Confirm>
       </PlayListWrapper>
     </CSSTransition>
   );

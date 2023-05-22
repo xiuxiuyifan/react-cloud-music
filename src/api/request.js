@@ -42,3 +42,11 @@ export const getSingerInfoRequest = (id) => {
     }
   })
 }
+
+export const getLyricRequest = (id) => {
+  return request.get(`/lyric`, {
+    params: {
+      id
+    }
+  })
+}

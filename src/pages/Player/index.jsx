@@ -14,6 +14,8 @@ import {
 import Toast from "../../baseUI/toast";
 import { playMode } from "../../api/static";
 import PlayList from "./playList";
+import { getLyricRequest } from "../../api/request";
+import Lyric from "../../api/lyric-parser";
 
 function Player(props) {
   const {
@@ -47,6 +49,8 @@ function Player(props) {
   const toastRef = useRef();
 
   const songReady = useRef(true);
+
+  const currentLyric = useRef();
 
   // 歌曲播放进度 , 当目前播放时间变化之后会重新刷新当前组件 重新 render, 然后重新计算播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
@@ -103,11 +107,26 @@ function Player(props) {
     });
     // 切换播放状态
     playerSetPlaying(true);
+    // 获取当前歌曲的歌词
+    getLyric(current.id);
     // 从头开始播放
     setCurrentTime(0);
     // 设置播放总时长
     setDuration((current.dt / 1000) | 0);
   }, [playerPlayList, playerCurrentIndex]);
+
+  const getLyric = (id) => {
+    let lyric = "";
+    getLyricRequest(id)
+      .then((data) => {
+        let lyric = new Lyric(data.lrc.lyric);
+        console.log(lyric);
+      })
+      .catch(() => {
+        songReady.current = true;
+        audioRef.current.play();
+      });
+  };
 
   const updateTime = (e) => {
     let currentTime = e.target.currentTime;

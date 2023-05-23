@@ -49,10 +49,18 @@ export default class Lyric {
       return
     }
     this.state = STATE_PLAYING
-    // 找到当前所在的杭
+    // 找到当前所在的行
     this.curLineIndex = this._findcurLineIndex(offset)
     // 把当前行传递给用户
     this._callHandler(this.curLineIndex - 1)
+    // 根据时间进度判断歌曲开始的时间戳, 记录歌曲开始播放的时间戳
+    this.startStamp = +new Date() - offset
+    // 如果在歌词列表里面能找见
+    if (this.curLineIndex < this.lines.length) {
+      clearTimeout(this.timer)
+      // 继续播放
+      this._playRest(isSeek)
+    }
   }
 
   _callHandler(i) {
@@ -64,5 +72,57 @@ export default class Lyric {
       txt: this.lines[i].txt,
       lineNum: i
     })
+  }
+
+  // 用传入的时间在歌词列表中进行查找
+  _findcurLineIndex(time) {
+    // 遍历歌词列表
+    for (let i = 0; i < this.lines.length; i++) {
+      if (time <= this[i].time) {
+        return i
+      }
+    }
+    return this.lines.length - 1
+  }
+
+  /**
+   * 
+   * @param {表示用户是否手动调整进度} isSeek 
+   */
+  _playRest(isSeek = false) {
+    // 根据索引取出 当前歌词行
+    let line = this.lines[this.curLineIndex]
+    let delay
+    if (isSeek) {
+      delay = line.time - (+new Date() - this.startStamp)
+    } else {
+      // 拿到上一行歌词的开始时间，算间隔
+      let preTime = this.lines[this.curLineIndex - 1] ? this.lines[this.curLineIndex - 1].time : 0;
+      delay = line.time - preTime
+    }
+    this.timer = setTimeout(() => {
+      this._callHandler(this.curLineIndex++)
+      if (this.curLineIndex < this.lines.length && this.state === STATE_PLAYING) {
+        this._playRest()
+      }
+    }, delay)
+  }
+
+  togglePlay(offset) {
+    if (this.state === STATE_PLAYING) {
+      this.stop()
+    } else {
+      this.state = STATE_PLAYING
+      this.play(offset, true)
+    }
+  }
+
+  stop() {
+    this.state = STATE_PAUSE
+    clearTimeout(this.timer)
+  }
+
+  seek(offset) {
+    this.play(offset, true)
   }
 }

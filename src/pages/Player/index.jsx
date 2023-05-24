@@ -50,7 +50,12 @@ function Player(props) {
 
   const songReady = useRef(true);
 
+  // 存放当前歌曲的歌词信息
   const currentLyric = useRef();
+  // 存放当前的一条歌词
+  const [currentPlayingLyric, setCurrentPlayingLyric] = useState("");
+  // 存放当前正在播放歌词的行数
+  const currentLineNum = useRef(0);
 
   // 歌曲播放进度 , 当目前播放时间变化之后会重新刷新当前组件 重新 render, 然后重新计算播放进度
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
@@ -65,6 +70,9 @@ function Player(props) {
       audioRef.current.pause(); // 暂停音乐
     }
     playerSetPlaying(playing);
+    if (currentLyric.current) {
+      currentLyric.current.togglePlay(currentTime * 1000);
+    }
   };
 
   const audioRef = useRef();
@@ -115,12 +123,28 @@ function Player(props) {
     setDuration((current.dt / 1000) | 0);
   }, [playerPlayList, playerCurrentIndex]);
 
+  /**
+   *
+   * @param {当前歌词所在的行，当前行歌词文本内容} param0
+   */
+  const handleLyric = ({ lineNum, txt }) => {};
   const getLyric = (id) => {
     let lyric = "";
+    if (currentLyric.current) {
+      currentLyric.current.stop();
+    }
     getLyricRequest(id)
       .then((data) => {
-        let lyric = new Lyric(data.lrc.lyric);
-        console.log(lyric);
+        lyric = data.lrc.lyric;
+        if (!lyric) {
+          currentLyric.current = null;
+          return;
+        }
+        currentLyric.current = new Lyric(lyric, handleLyric);
+        // 拿到歌词进行播放
+        currentLyric.current.play();
+        currentLineNum.current = 0;
+        currentLyric.current.seek(0);
       })
       .catch(() => {
         songReady.current = true;
@@ -140,6 +164,10 @@ function Player(props) {
     // 播放音乐
     if (!playerPlaying) {
       playerSetPlaying(true);
+    }
+    // 当用户手动更改了播放时间
+    if (currentLyric.current) {
+      currentLyric.current.seek(newTime * 1000);
     }
   };
 
@@ -255,6 +283,9 @@ function Player(props) {
           handleNext={handleNext}
           changeMode={changeMode}
           togglePlayList={playListSetVisible}
+          currentLyric={currentLyric.current}
+          currentPlayingLyric={currentPlayingLyric}
+          currentLineNum={currentLineNum.current}
         ></NormalPlayer>
       )}
       <PlayList></PlayList>

@@ -28,6 +28,9 @@ function NormalPlayer(props) {
     handleNext,
     changeMode,
     togglePlayList,
+    currentLineNum,
+    currentPlayingLyric,
+    currentLyric,
   } = props;
 
   const normalPlayerRef = useRef();
@@ -127,6 +130,10 @@ function NormalPlayer(props) {
     return content;
   };
 
+  const currentState = useRef("");
+  const lyricScrollRef = useRef();
+  const lyricLineRefs = useRef([]);
+
   return (
     <CSSTransition
       classNames="normal"
@@ -156,15 +163,31 @@ function NormalPlayer(props) {
           <h1 className="subtitle">{getName(song.ar)}</h1>
         </Top>
         <Middle ref={cdWrapperRef}>
-          <CDWrapper>
-            <div className="cd">
-              <img
-                className={`image play ${playing ? "" : "pause"}`}
-                src={song.al.picUrl + "?param=400x400"}
-                alt=""
-              />
-            </div>
-          </CDWrapper>
+          <CSSTransition
+            timeout={400}
+            classNames="fade"
+            in={currentState.current !== "lyric"}
+          >
+            <CDWrapper
+              style={{
+                visibility:
+                  currentState.current !== "lyric" ? "visible" : "hidden",
+              }}
+            >
+              <div className="cd">
+                <img
+                  className={`image play ${playing ? "" : "pause"}`}
+                  src={song.al.picUrl + "?param=400x400"}
+                  alt=""
+                />
+              </div>
+            </CDWrapper>
+          </CSSTransition>
+          <CSSTransition
+            timeout={400}
+            classNames="fade"
+            in={currentState.current === "lyric"}
+          ></CSSTransition>
         </Middle>
         <Bottom className="bottom">
           <ProgressWrapper>

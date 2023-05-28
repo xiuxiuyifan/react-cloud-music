@@ -5,6 +5,7 @@ import Recommend from "../pages/Recommend";
 import Singers from "../pages/Singers";
 import Album from "../pages/Album";
 import Singer from "../pages/Singer";
+import Search from "../pages/Search";
 
 const routers = [
   {
@@ -34,6 +35,10 @@ const routers = [
             element: <Album />,
           },
         ],
+      },
+      {
+        path: "search",
+        element: <Search />,
       },
       {
         path: "",

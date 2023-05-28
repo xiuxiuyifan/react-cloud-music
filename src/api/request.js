@@ -50,3 +50,14 @@ export const getLyricRequest = (id) => {
     }
   })
 }
+export const getHotKeyWordsRequest = () => {
+  return request.get(`/search/hot`);
+};
+
+export const getSuggestListRequest = query => {
+  return request.get(`/search/suggest?keywords=${query}`);
+};
+
+export const getResultSongsListRequest = query => {
+  return request.get(`/search?keywords=${query}`);
+};

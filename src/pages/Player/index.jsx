@@ -127,7 +127,11 @@ function Player(props) {
    *
    * @param {当前歌词所在的行，当前行歌词文本内容} param0
    */
-  const handleLyric = ({ lineNum, txt }) => {};
+  const handleLyric = ({ lineNum, txt }) => {
+    if (!currentLyric.current) return;
+    currentLineNum.current = lineNum;
+    setCurrentPlayingLyric(txt);
+  };
   const getLyric = (id) => {
     let lyric = "";
     if (currentLyric.current) {

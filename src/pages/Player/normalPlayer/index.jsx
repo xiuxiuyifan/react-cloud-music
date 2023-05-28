@@ -1,4 +1,4 @@
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import {
   Bottom,
   CDWrapper,
@@ -148,6 +148,19 @@ function NormalPlayer(props) {
       currentState.current = "";
     }
   };
+
+  // 监听当 currentLine 发生变化之后， 需要改变歌词的位置
+  useEffect(() => {
+    console.log(currentLineNum);
+    if (!lyricScrollRef.current) return;
+    let bScroll = lyricScrollRef.current.getBScroll();
+    if (currentLineNum > 5) {
+      let lineEl = lyricLineRefs.current[currentLineNum - 5].current;
+      bScroll.scrollToElement(lineEl, 1000);
+    } else {
+      bScroll.scrollTo(0, 0, 1000);
+    }
+  }, [currentLineNum]);
   return (
     <CSSTransition
       classNames="normal"

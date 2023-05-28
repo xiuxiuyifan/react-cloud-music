@@ -141,7 +141,6 @@ function PlayList(props) {
 
   // 点击切换歌曲
   const handleChangeCurrentIndex = (index) => {
-    console.log(index);
     if (playerCurrentIndex === index) {
       return;
     }

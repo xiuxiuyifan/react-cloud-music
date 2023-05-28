@@ -18,6 +18,7 @@ export default class Lyric {
     this._initLines()
   }
 
+  // 格式化歌词信息
   _initLines() {
     // 解析代码
     const lines = this.lrc.split('\n')  // 按 \n 分隔成数组
@@ -78,7 +79,7 @@ export default class Lyric {
   _findcurLineIndex(time) {
     // 遍历歌词列表
     for (let i = 0; i < this.lines.length; i++) {
-      if (time <= this[i].time) {
+      if (time <= this.lines[i].time) {
         return i
       }
     }

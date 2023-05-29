@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getAlbumDetailRequest, getBannerList, getHotKeyWordsRequest, getHotSingerList, getRankList, getRecommendList, getSingerInfoRequest, getSingerList } from "../api/request";
+import { getAlbumDetailRequest, getBannerList, getHotKeyWordsRequest, getHotSingerList, getRankList, getRecommendList, getSingerInfoRequest, getSingerList, getSuggestListRequest } from "../api/request";
 import { playMode } from "../api/static";
 import { findIndex } from "../utils";
 
@@ -216,7 +216,7 @@ const useStore = create((set, get) => ({
 
   // 搜索页面
   searchHotList: [], // 热门搜索关键词
-  searchSetHotList: (list) => {
+  searchSetHotList: () => {
     getHotKeyWordsRequest()
       .then((res) => {
         set({
@@ -225,10 +225,13 @@ const useStore = create((set, get) => ({
       })
   },
   searchSuggestList: [], // 列表，包括歌单和歌手
-  searchSetSuggestList: (list) => {
-    set({
-      searchSuggestList: list
-    })
+  searchSetSuggestList: (q) => {
+    getSuggestListRequest(q)
+      .then((res) => {
+        set({
+          searchSuggestList: res.result
+        })
+      })
   },
   searchSongsList: [],  // 歌曲列表
   searchSetSongsList: (list) => {

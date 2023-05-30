@@ -55,8 +55,9 @@ const Search = () => {
     searchSetSuggestList(q);
   };
 
-  // 编写热门搜索列表
+  const selectItem = (e, id) => {};
 
+  // 编写热门搜索列表
   const renderHotKey = () => {
     let list = searchHotList || [];
     return (
@@ -86,7 +87,10 @@ const Search = () => {
         <h1 className="title">相关歌手</h1>
         {singers.map((item, index) => {
           return (
-            <ListItem key={item.accountId + "" + index}>
+            <ListItem
+              key={item.accountId + "" + index}
+              onClick={() => navigate(`/singers/${item.id}`)}
+            >
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -122,7 +126,10 @@ const Search = () => {
         <h1 className="title">相关歌单</h1>
         {albums.map((item, index) => {
           return (
-            <ListItem key={item.accountId + "" + index}>
+            <ListItem
+              key={item.accountId + "" + index}
+              onClick={() => navigate(`/album/${item.id}`)}
+            >
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -155,7 +162,7 @@ const Search = () => {
       <SongItem style={{ paddingLeft: "20px" }}>
         {searchSongsList.map((item) => {
           return (
-            <li key={item.id}>
+            <li key={item.id} onClick={(e) => selectItem(e, item.id)}>
               <div className="info">
                 <span>{item.name}</span>
                 <span>

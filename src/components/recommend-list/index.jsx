@@ -3,15 +3,20 @@ import { ListWrapper, List, ListItem } from "./style";
 import { getCount } from "../../utils";
 import LazyLoad from "react-lazyload";
 import musicPng from "./music.png";
+import { useNavigate } from "react-router-dom";
 
 const RecommendList = (props) => {
+  const navigate = useNavigate();
   return (
     <ListWrapper>
       <h1 className="title">推荐歌单</h1>
       <List>
         {props.recommendList.map((item, index) => {
           return (
-            <ListItem key={item.id + index}>
+            <ListItem
+              key={item.id + index}
+              onClick={() => navigate(`/recommend/${item.id}`)}
+            >
               <div className="img_wrapper">
                 <div className="decorate"></div>
                 <LazyLoad

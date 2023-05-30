@@ -6,6 +6,7 @@ import Scroll from "../../baseUI/scroll";
 import useStore from "../../store";
 import { forceCheck } from "react-lazyload";
 import Loading from "../../baseUI/loading";
+import { Outlet } from "react-router-dom";
 
 function Recommend() {
   const {
@@ -36,6 +37,7 @@ function Recommend() {
           <RecommendList recommendList={recommendList}></RecommendList>
         </div>
       </Scroll>
+      <Outlet />
     </Content>
   );
 }

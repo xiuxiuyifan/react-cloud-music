@@ -31,6 +31,7 @@ function Album() {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  console.log(id);
 
   const headerEl = useRef();
 
@@ -46,7 +47,7 @@ function Album() {
 
   useEffect(() => {
     rankSetCurrentAlbum(id);
-  }, []);
+  }, [id]);
 
   // 将传递给子组件的函数用 useCallback 包裹，
   const handleScroll = useCallback(

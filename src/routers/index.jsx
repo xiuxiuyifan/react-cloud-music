@@ -15,6 +15,12 @@ const routers = [
       {
         path: "recommend",
         element: <Recommend />,
+        children: [
+          {
+            path: ":id",
+            element: <Album />,
+          },
+        ],
       },
       {
         path: "singers",
@@ -35,6 +41,10 @@ const routers = [
             element: <Album />,
           },
         ],
+      },
+      {
+        path: "album/:id",
+        element: <Album />,
       },
       {
         path: "search",

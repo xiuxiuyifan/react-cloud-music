@@ -1,12 +1,21 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { Container, HotKey, List, ListItem, ShortcutWrapper } from "./style";
+import {
+  Container,
+  HotKey,
+  List,
+  ListItem,
+  ShortcutWrapper,
+  SongItem,
+} from "./style";
 import SearchBox from "../../baseUI/search-box";
 import Scroll from "../../baseUI/scroll";
 import useStore from "../../store";
 import LazyLoad, { forceCheck } from "react-lazyload";
 import musicPng from "./music.png";
+import singerPng from "./singer.png";
+import { getName } from "../../utils";
 
 const Search = () => {
   const {
@@ -14,6 +23,7 @@ const Search = () => {
     searchSetHotList,
     searchSuggestList,
     searchSetSuggestList,
+    searchSongsList,
   } = useStore();
 
   const [show, setShow] = useState(false);
@@ -66,7 +76,43 @@ const Search = () => {
     );
   };
 
-  const renderSingers = () => {};
+  const renderSingers = () => {
+    let singers = searchSuggestList.artists;
+    if (!singers || !singers.length) {
+      return;
+    }
+    return (
+      <List>
+        <h1 className="title">相关歌手</h1>
+        {singers.map((item, index) => {
+          return (
+            <ListItem key={item.accountId + "" + index}>
+              <div className="img_wrapper">
+                <LazyLoad
+                  placeholder={
+                    <img
+                      width="100%"
+                      height="100%"
+                      src={singerPng}
+                      alt="singer"
+                    />
+                  }
+                >
+                  <img
+                    src={item.picUrl}
+                    width="100%"
+                    height="100%"
+                    alt="music"
+                  />
+                </LazyLoad>
+              </div>
+              <span className="name"> 歌手: {item.name}</span>
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
 
   const renderAlbum = () => {
     let albums = searchSuggestList.albums;
@@ -104,7 +150,24 @@ const Search = () => {
     );
   };
 
-  const renderSongs = () => {};
+  const renderSongs = () => {
+    return (
+      <SongItem style={{ paddingLeft: "20px" }}>
+        {searchSongsList.map((item) => {
+          return (
+            <li key={item.id}>
+              <div className="info">
+                <span>{item.name}</span>
+                <span>
+                  {getName(item.artists)} - {item.album.name}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </SongItem>
+    );
+  };
 
   return (
     <CSSTransition

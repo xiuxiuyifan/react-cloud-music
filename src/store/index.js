@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getAlbumDetailRequest, getBannerList, getHotKeyWordsRequest, getHotSingerList, getRankList, getRecommendList, getSingerInfoRequest, getSingerList, getSuggestListRequest } from "../api/request";
+import { getAlbumDetailRequest, getBannerList, getHotKeyWordsRequest, getHotSingerList, getRankList, getRecommendList, getResultSongsListRequest, getSingerInfoRequest, getSingerList, getSuggestListRequest } from "../api/request";
 import { playMode } from "../api/static";
 import { findIndex } from "../utils";
 
@@ -232,13 +232,14 @@ const useStore = create((set, get) => ({
           searchSuggestList: res.result
         })
       })
+    getResultSongsListRequest(q)
+      .then((res) => {
+        set({
+          searchSongsList: res.result.songs
+        })
+      })
   },
   searchSongsList: [],  // 歌曲列表
-  searchSetSongsList: (list) => {
-    set({
-      searchSongsList: list
-    })
-  }
 }))
 
 export default useStore

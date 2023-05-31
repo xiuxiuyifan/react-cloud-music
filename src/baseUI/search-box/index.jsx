@@ -54,10 +54,10 @@ const SearchBox = (props) => {
   const { handleQuery } = props;
 
   const handleChange = (e) => {
-    let value = e.currentTarget.value;
+    let value = e.target.value;
     // 调用父组件的回调方法
-    debounce(handleQuery)(query);
     setQuery(value);
+    debounce(handleQuery)(value);
   };
 
   const clearQuery = () => {

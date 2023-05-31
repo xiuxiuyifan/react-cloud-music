@@ -226,18 +226,31 @@ const useStore = create((set, get) => ({
   },
   searchSuggestList: [], // 列表，包括歌单和歌手
   searchSetSuggestList: (q) => {
-    getSuggestListRequest(q)
-      .then((res) => {
-        set({
-          searchSuggestList: res.result
-        })
+    if (!q) {
+      set({
+        searchSuggestList: [],
+        searchSongsList: []
       })
-    getResultSongsListRequest(q)
-      .then((res) => {
-        set({
-          searchSongsList: res.result.songs
+      return
+    } else {
+      if (!/[\u4e00-\u9fa5]/.test(q)) {
+        return
+      }
+      // 获取相关专辑和相关歌手
+      getSuggestListRequest(q)
+        .then((res) => {
+          set({
+            searchSuggestList: res.result
+          })
         })
-      })
+      // 获取相关歌曲数据
+      getResultSongsListRequest(q)
+        .then((res) => {
+          set({
+            searchSongsList: res.result.songs
+          })
+        })
+    }
   },
   searchSongsList: [],  // 歌曲列表
 }))

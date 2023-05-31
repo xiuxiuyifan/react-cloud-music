@@ -49,7 +49,6 @@ const Search = () => {
   }, []);
 
   const handleQuery = (q) => {
-    if (!q) return;
     setQuery(q);
     // 调用查询接口
     searchSetSuggestList(q);
@@ -76,7 +75,7 @@ const Search = () => {
       </ul>
     );
   };
-
+  // 相关歌手
   const renderSingers = () => {
     let singers = searchSuggestList.artists;
     if (!singers || !singers.length) {
@@ -117,14 +116,14 @@ const Search = () => {
       </List>
     );
   };
-
+  // 相关歌单
   const renderAlbum = () => {
-    let albums = searchSuggestList.albums;
-    if (!albums || !albums.length) return;
+    let playlists = searchSuggestList.playlists;
+    if (!playlists || !playlists.length) return;
     return (
       <List>
         <h1 className="title">相关歌单</h1>
-        {albums.map((item, index) => {
+        {playlists.map((item, index) => {
           return (
             <ListItem
               key={item.accountId + "" + index}
@@ -142,7 +141,7 @@ const Search = () => {
                   }
                 >
                   <img
-                    src={item.artist.picUrl}
+                    src={item.coverImgUrl}
                     width="100%"
                     height="100%"
                     alt="music"
@@ -156,7 +155,7 @@ const Search = () => {
       </List>
     );
   };
-
+  // 相关歌曲
   const renderSongs = () => {
     return (
       <SongItem style={{ paddingLeft: "20px" }}>

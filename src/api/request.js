@@ -61,3 +61,11 @@ export const getSuggestListRequest = query => {
 export const getResultSongsListRequest = query => {
   return request.get(`/search?keywords=${query}`);
 };
+
+export const getSongDetailRequest = id => {
+  return request.get(`/song/detail`, {
+    params: {
+      ids: id
+    }
+  })
+}

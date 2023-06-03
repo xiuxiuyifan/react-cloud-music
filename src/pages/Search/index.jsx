@@ -24,6 +24,7 @@ const Search = () => {
     searchSuggestList,
     searchSetSuggestList,
     searchSongsList,
+    searchInsertSong,
   } = useStore();
 
   const [show, setShow] = useState(false);
@@ -54,7 +55,10 @@ const Search = () => {
     searchSetSuggestList(q);
   };
 
-  const selectItem = (e, id) => {};
+  const selectItem = (e, id) => {
+    // 获取当单曲数据，然后添加到播放 列表里面
+    searchInsertSong(id);
+  };
 
   // 编写热门搜索列表
   const renderHotKey = () => {

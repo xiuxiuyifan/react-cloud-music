@@ -1,5 +1,17 @@
 import { create } from "zustand";
-import { getAlbumDetailRequest, getBannerList, getHotKeyWordsRequest, getHotSingerList, getRankList, getRecommendList, getResultSongsListRequest, getSingerInfoRequest, getSingerList, getSuggestListRequest } from "../api/request";
+import {
+  getAlbumDetailRequest,
+  getBannerList,
+  getHotKeyWordsRequest,
+  getHotSingerList,
+  getRankList,
+  getRecommendList,
+  getResultSongsListRequest,
+  getSingerInfoRequest,
+  getSingerList,
+  getSongDetailRequest,
+  getSuggestListRequest
+} from "../api/request";
 import { playMode } from "../api/static";
 import { findIndex } from "../utils";
 
@@ -253,6 +265,23 @@ const useStore = create((set, get) => ({
     }
   },
   searchSongsList: [],  // 歌曲列表
+  // 把搜索到的歌曲列表中的数据插入到歌曲列表里面
+  searchInsertSong: (id) => {
+    // 获取单曲歌曲详情
+    getSongDetailRequest(id)
+      .then((res) => {
+        let song = res.songs[0]
+        handleInsertSong(get, set, song)
+      })
+  }
 }))
 
 export default useStore
+
+function handleInsertSong(get, set, song) {
+  let {
+    playerPlayList,
+    playerSequencePlayList,
+    playerCurrentIndex
+  } = get()
+}

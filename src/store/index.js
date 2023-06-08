@@ -284,4 +284,48 @@ function handleInsertSong(get, set, song) {
     playerSequencePlayList,
     playerCurrentIndex
   } = get()
+  // 先看一下当前歌曲在不在当前的播放列表里面
+  let fpIndex = findIndex(song, playerPlayList)
+  // 说明当前播放的就是当前歌曲，则什么都不做，直接返回
+  if (fpIndex === playerCurrentIndex && fpIndex !== -1) {
+    return
+  }
+  // 当前歌曲不在播放列表里面的时候，放到当前播放歌曲的下一个位置，并立刻播放下一首歌曲
+  playerCurrentIndex++
+  // 起始的索引，要删除 0 个，就是插入
+  playerPlayList.splice(playerCurrentIndex, 0, song)
+
+
+  // 如果当前歌曲本身就在播放列表里面的话
+  if (fpIndex > -1) {
+    // 如果 点击的歌曲在当前播放的索引小于当前正在播放的索引，则删除它 索引减一
+    if (playerCurrentIndex > fpIndex) {
+      playerPlayList.splice(fpIndex, 1)
+      playerCurrentIndex--
+    } else {
+      // 在当前播放列表的后面的话，则直接删除
+      playerPlayList.splice(fpIndex, 1)
+    }
+  }
+
+  // 相同的逻辑处理顺序播放列表
+  // 取出 点击歌曲在 顺序列表中的索引
+  let fsIndex = findIndex(song, playerSequencePlayList);
+  // 当前播放歌曲在 原始序列歌曲列表中的索引
+  let sequenceIndex = findIndex(playerPlayList[playerCurrentIndex], playerSequencePlayList)
+  if (fsIndex > -1) {
+    if (sequenceIndex > fsIndex) {
+      playerSequencePlayList.splice(fsIndex, 1)
+      sequenceIndex--
+    } else {
+      playerSequencePlayList.splice(fsIndex, 1)
+    }
+  }
+
+  set({
+    playerCurrentIndex,
+    playerPlayList,
+    playerSequencePlayList
+  })
+
 }

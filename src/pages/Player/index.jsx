@@ -77,11 +77,6 @@ function Player(props) {
 
   const audioRef = useRef();
 
-  useEffect(() => {
-    // 设置当前播放的索引为0
-    playerSetCurrentIndex(0);
-  }, []);
-
   // 控制音乐的暂停和播放
   useEffect(() => {
     playerPlaying ? audioRef.current.play() : audioRef.current.pause();
@@ -90,6 +85,7 @@ function Player(props) {
   // 当前播放的音乐发生变化的时候，监听 currentIndex 和 播放列表变化
   useEffect(() => {
     // 进行一些边界判断
+    console.log("hihii", playerCurrentIndex);
     if (
       !playerPlayList.length ||
       playerCurrentIndex === -1 ||

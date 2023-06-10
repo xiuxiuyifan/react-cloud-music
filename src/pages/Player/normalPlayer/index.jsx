@@ -151,7 +151,6 @@ function NormalPlayer(props) {
 
   // 监听当 currentLine 发生变化之后， 需要改变歌词的位置
   useEffect(() => {
-    console.log(currentLineNum);
     if (!lyricScrollRef.current) return;
     let bScroll = lyricScrollRef.current.getBScroll();
     if (currentLineNum > 5) {

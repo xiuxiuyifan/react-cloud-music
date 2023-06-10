@@ -82,12 +82,12 @@ const MusicNote = forwardRef((props, ref) => {
         // 放到下一次宏任务中执行动画逻辑，
         // 因为本次元素虽然由 none 变换成了 block 了，但是元素要显示出来，需要浏览器的回流
         // 过程，无法立即显示，也就是元素目前还是隐藏的，那么位置就是未知的，所以 transform 就无法生效
-        Promise.resolve().then(() => {
+        setTimeout(() => {
           item.running = true;
           item.style[transform] = `translate3d(0, 750px, 0)`;
           let icon = item.querySelector("div");
           icon.style[transform] = `translate3d(-40px, 0, 0)`;
-        });
+        }, 20);
         break;
       }
     }

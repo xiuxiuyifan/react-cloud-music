@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import {
@@ -16,9 +16,11 @@ import LazyLoad, { forceCheck } from "react-lazyload";
 import musicPng from "./music.png";
 import singerPng from "./singer.png";
 import { getName } from "../../utils";
+import MusicNote from "../../baseUI/music-note";
 
 const Search = () => {
   const {
+    playerPlayList,
     searchHotList,
     searchSetHotList,
     searchSuggestList,
@@ -32,6 +34,8 @@ const Search = () => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
+
+  const musicNoteRef = useRef();
 
   const goBack = () => {
     navigate(-1);
@@ -58,6 +62,11 @@ const Search = () => {
   const selectItem = (e, id) => {
     // 获取当单曲数据，然后添加到播放 列表里面
     searchInsertSong(id);
+    console.log(e);
+    musicNoteRef.current.startAnimation({
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY,
+    });
   };
 
   // 编写热门搜索列表
@@ -187,7 +196,7 @@ const Search = () => {
       classNames="fly"
       onExit={() => goBack()}
     >
-      <Container>
+      <Container play={playerPlayList.length}>
         {/* 热门列表 */}
         <ShortcutWrapper show={!query}>
           <Scroll>
@@ -215,6 +224,7 @@ const Search = () => {
             handleQuery={handleQuery}
           ></SearchBox>
         </div>
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );

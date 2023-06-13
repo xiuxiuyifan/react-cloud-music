@@ -54,3 +54,5 @@
 
 1. 根据后台返回的数据，格式化歌词歌词格式，
 2. 用户正常点击开始播放按钮，用当前时间作为一首歌播放的开始时间，
+
+[后台代码仓库](https://github.com/Binaryify/NeteaseCloudMusicApi)

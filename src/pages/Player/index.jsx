@@ -206,7 +206,7 @@ function Player(props) {
     }
     let index = playerCurrentIndex + 1;
     // 判断如果当前播放的 index 到了最后一个，则重置为 第一个(0)
-    if (index === playerPlayList.length) playerCurrentIndex = 0;
+    if (index === playerPlayList.length) playerSetCurrentIndex(0);
     if (!playerPlaying) playerSetPlaying(true);
     playerSetCurrentIndex(index);
   };

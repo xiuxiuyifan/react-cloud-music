@@ -1,54 +1,64 @@
 import { Navigate } from "react-router-dom";
-import Home from "../pages/Home";
-import Rank from "../pages/Rank";
-import Recommend from "../pages/Recommend";
-import Singers from "../pages/Singers";
-import Album from "../pages/Album";
-import Singer from "../pages/Singer";
-import Search from "../pages/Search";
+import { Suspense, lazy } from "react";
+
+const Home = lazy(() => import("../pages/Home"));
+const Rank = lazy(() => import("../pages/Rank"));
+const Recommend = lazy(() => import("../pages/Recommend"));
+const Singers = lazy(() => import("../pages/Singers"));
+const Album = lazy(() => import("../pages/Album"));
+const Singer = lazy(() => import("../pages/Singer"));
+const Search = lazy(() => import("../pages/Search"));
+
+const SuspenseComponent = (Component) => {
+  return (
+    <Suspense fallback={null}>
+      <Component></Component>
+    </Suspense>
+  );
+};
 
 const routers = [
   {
     path: "/",
-    element: <Home />,
+    element: SuspenseComponent(Home),
     children: [
       {
         path: "recommend",
-        element: <Recommend />,
+        element: SuspenseComponent(Recommend),
         children: [
           {
             path: ":id",
-            element: <Album />,
+            element: SuspenseComponent(Album),
           },
         ],
       },
       {
         path: "singers",
-        element: <Singers />,
+        element: SuspenseComponent(Singers),
         children: [
           {
             path: ":id",
-            element: <Singer />,
+            element: SuspenseComponent(Singer),
           },
         ],
       },
       {
         path: "rank",
-        element: <Rank />,
+        element: SuspenseComponent(Rank),
         children: [
           {
             path: ":id",
-            element: <Album />,
+            element: SuspenseComponent(Album),
           },
         ],
       },
       {
         path: "album/:id",
-        element: <Album />,
+        element: SuspenseComponent(Album),
       },
       {
         path: "search",
-        element: <Search />,
+        element: SuspenseComponent(Search),
       },
       {
         path: "",
